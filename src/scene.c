@@ -93,8 +93,12 @@ void validate_buildings(const struct Scene* scene, bool validate) {
       const struct Building* building1 = scene->buildings + b1,
                            * building2 = scene->buildings + b2;
       if (are_building_overlapping(building1, building2))
-        report_error_overlapping_buildings(building1->id, building2->id,
-                                           validate);
+        report_error_overlapping_objects(
+          building1->is_house ? "house" : "building",
+          building1->id,
+          building2->is_house ? "house" : "building",
+          building2->id,
+          validate);
     }
 }
 
@@ -408,7 +412,8 @@ void add_building(struct Scene* scene,
     ++b;
   if (b < scene->num_buildings &&
       strcmp(building->id, scene->buildings[b].id) == 0)
-    report_error_non_unique_identifiers("building", building->id, validate);
+    report_error_non_unique_identifiers(
+      building->is_house ? "house" : "building", building->id, validate);
   for (unsigned int b2 = scene->num_buildings; b2 > b; --b2)
     scene->buildings[b2] = scene->buildings[b2 - 1];
   struct Building* scene_building = scene->buildings + b;

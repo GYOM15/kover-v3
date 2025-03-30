@@ -71,7 +71,7 @@ setup() {
   run kover validate < "$examples_dir"/2b_overlapping.invalid
   [ "$status" -eq 1 ]
   assert_line "not ok"
-  assert_line "error: buildings b1 and b2 are overlapping"
+  assert_line "error: building b1 and building b2 are overlapping"
 }
 
 @test "kover validate reports an error when a building line has a wrong number of arguments" {
@@ -114,6 +114,23 @@ setup() {
   [ "$status" -eq 1 ]
   assert_line "not ok"
   assert_line 'error: invalid positive integer "-2" (line #2)'
+}
+
+# Wrong houses
+# ------------
+
+@test "kover validate reports an error when two houses have same id" {
+  run kover validate < "$examples_dir"/2h_non_unique_id.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line "error: house identifier h1 is non unique"
+}
+
+@test "kover validate reports an error when two houses are overlapping" {
+  run kover validate < "$examples_dir"/2h_overlapping.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line "error: house h1 and house h2 are overlapping"
 }
 
 # Wrong antennas
