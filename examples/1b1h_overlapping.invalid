@@ -1,0 +1,4 @@
+begin scene
+  building b 0 0 1 1
+  house h 1 0 1 1
+end scene

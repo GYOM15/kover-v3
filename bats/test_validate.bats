@@ -219,3 +219,14 @@ setup() {
   assert_line "not ok"
   assert_line 'error: invalid positive integer "-1" (line #2)'
 }
+
+# Overlapping building and house
+# ------------------------------
+
+@test "kover validate reports an error when a building and a house are overlapping" {
+  run kover validate < "$examples_dir"/1b1h_overlapping.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line "error: building b and house h are overlapping"
+}
+
