@@ -172,7 +172,8 @@ void parse_line(const char* line,
 bool load_building_from_parsed_line(const struct ParsedLine* parsed_line,
                                     struct Scene* scene,
                                     bool validate) {
-  if (strcmp(parsed_line->tokens[0], "building") != 0)
+  if (strcmp(parsed_line->tokens[0], "building") != 0 &&
+      strcmp(parsed_line->tokens[0], "house") != 0)
     return false;
   if (parsed_line->num_tokens != 6)
     report_error_line_wrong_arguments_number("building",
@@ -200,6 +201,7 @@ bool load_building_from_parsed_line(const struct ParsedLine* parsed_line,
                                         validate);
   struct Building building;
   strncpy(building.id, parsed_line->tokens[1], MAX_LENGTH_ID);
+  building.is_house = strcmp(parsed_line->tokens[0], "house") == 0;
   building.x = atoi(parsed_line->tokens[2]);
   building.y = atoi(parsed_line->tokens[3]);
   building.w = atoi(parsed_line->tokens[4]);
@@ -308,15 +310,32 @@ bool scene_is_empty(const struct Scene* scene) {
   return scene->num_buildings == 0 && scene->num_antennas == 0;
 }
 
+int scene_num_buildings(const struct Scene* scene) {
+  int num_buildings = 0;
+  for (unsigned int b = 0; b < scene->num_buildings; ++b)
+    num_buildings += scene->buildings[b].is_house ? 0 : 1;
+  return num_buildings;
+}
+
+int scene_num_houses(const struct Scene* scene) {
+  int num_houses = 0;
+  for (unsigned int b = 0; b < scene->num_buildings; ++b)
+    num_houses += scene->buildings[b].is_house ? 1 : 0;
+  return num_houses;
+}
+
 void print_scene_summary(const struct Scene* scene) {
-  if (scene->num_buildings == 0 && scene->num_antennas == 0) {
+  int num_buildings = scene_num_buildings(scene),
+      num_houses = scene_num_houses(scene);
+  if (scene_is_empty(scene)) {
     puts("An empty scene");
     return;
   }
   printf("A scene with ");
-  if (scene->num_buildings > 0)
-    printf("%d building%s", scene->num_buildings,
-           scene->num_buildings > 1 ? "s" : "");
+  if (num_buildings > 0)
+    printf("%d building%s", num_buildings, num_buildings > 1 ? "s" : "");
+  if (num_houses > 0)
+    printf("%d house%s", num_houses, num_houses > 1 ? "s" : "");
   if (scene->num_buildings > 0 && scene->num_antennas > 0)
     printf(" and ");
   if (scene->num_antennas > 0)
@@ -387,7 +406,7 @@ void add_building(struct Scene* scene,
     scene->buildings[b2] = scene->buildings[b2 - 1];
   struct Building* scene_building = scene->buildings + b;
   strncpy(scene_building->id, building->id, MAX_LENGTH_ID);
-  scene_building->is_house = false;
+  scene_building->is_house = building->is_house;
   scene_building->x = building->x;
   scene_building->y = building->y;
   scene_building->w = building->w;

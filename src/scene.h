@@ -100,6 +100,22 @@ void validate_scene(const struct Scene* scene, bool validate);
 bool scene_is_empty(const struct Scene* scene);
 
 /**
+ * Returns the number of buildings in a scene
+ *
+ * @param scene  The scene
+ * @return       The number of buildings
+ */
+int scene_num_buildings(const struct Scene* scene);
+
+/**
+ * Returns the number of houses in a scene
+ *
+ * @param scene  The scene
+ * @return       The number of houses
+ */
+int scene_num_houses(const struct Scene* scene);
+
+/**
  * Prints a summary of the scene on stdout
  *
  * @param scene  The scene to print
