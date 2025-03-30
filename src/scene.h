@@ -116,6 +116,14 @@ int scene_num_buildings(const struct Scene* scene);
 int scene_num_houses(const struct Scene* scene);
 
 /**
+ * Returns the type of building
+ *
+ * @param building  The building
+ * @return          The type
+ */
+const char* building_type(const struct Building* building);
+
+/**
  * Prints a summary of the scene on stdout
  *
  * @param scene  The scene to print

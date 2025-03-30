@@ -94,10 +94,8 @@ void validate_buildings(const struct Scene* scene, bool validate) {
                            * building2 = scene->buildings + b2;
       if (are_building_overlapping(building1, building2))
         report_error_overlapping_objects(
-          building1->is_house ? "house" : "building",
-          building1->id,
-          building2->is_house ? "house" : "building",
-          building2->id,
+          building_type(building1), building1->id,
+          building_type(building2), building2->id,
           validate);
     }
 }
@@ -328,6 +326,10 @@ int scene_num_houses(const struct Scene* scene) {
   return num_houses;
 }
 
+const char* building_type(const struct Building* building) {
+  return building->is_house ? "house" : "building";
+}
+
 void print_scene_summary(const struct Scene* scene) {
   int num_buildings = scene_num_buildings(scene),
       num_houses = scene_num_houses(scene),
@@ -357,8 +359,7 @@ void print_scene_summary(const struct Scene* scene) {
 void print_scene_buildings(const struct Scene* scene) {
   for (unsigned int b = 0; b < scene->num_buildings; ++b) {
     const struct Building* building = scene->buildings + b;
-    printf("  %s %s at %d %d with dimensions %d %d\n",
-           building->is_house ? "house" : "building",
+    printf("  %s %s at %d %d with dimensions %d %d\n", building_type(building),
            building->id, building->x, building->y, building->w, building->h);
   }
 }
@@ -412,8 +413,8 @@ void add_building(struct Scene* scene,
     ++b;
   if (b < scene->num_buildings &&
       strcmp(building->id, scene->buildings[b].id) == 0)
-    report_error_non_unique_identifiers(
-      building->is_house ? "house" : "building", building->id, validate);
+    report_error_non_unique_identifiers(building_type(building),
+                                        building->id, validate);
   for (unsigned int b2 = scene->num_buildings; b2 > b; --b2)
     scene->buildings[b2] = scene->buildings[b2 - 1];
   struct Building* scene_building = scene->buildings + b;
