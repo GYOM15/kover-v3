@@ -53,6 +53,12 @@ setup() {
   assert_line --index 1 "house h2: E"
 }
 
+@test "kover quality runs correctly on a scene with 1 building and 1 antenna (0 corner)" {
+  run kover quality < "$examples_dir"/1b1a_0corner.scene
+  assert_success
+  assert_output "building b: E"
+}
+
 # Wrong usage
 # -----------
 
