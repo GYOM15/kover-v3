@@ -387,6 +387,7 @@ void add_building(struct Scene* scene,
     scene->buildings[b2] = scene->buildings[b2 - 1];
   struct Building* scene_building = scene->buildings + b;
   strncpy(scene_building->id, building->id, MAX_LENGTH_ID);
+  scene_building->is_house = false;
   scene_building->x = building->x;
   scene_building->y = building->y;
   scene_building->w = building->w;

@@ -20,6 +20,8 @@
 struct Building {
   // The identifier of the building
   char id[MAX_LENGTH_ID + 1];
+  // Is the building a house?
+  bool is_house;
   // The x coordinate of the building
   int x;
   // The y coordinate of the building
