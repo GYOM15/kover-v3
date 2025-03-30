@@ -26,8 +26,8 @@ A scene is a text stream that must satisfy the following syntax:\n\
 \n\
   1. The first line must be exactly 'begin scene'\n\
   2. The last line must be exactly 'end scene'\n\
-  3. Any line between the first and last line must either be a building line\n\
-     or an antenna line\n\
+  3. Any line between the first and last line must either be a building line,\n\
+     a house line or an antenna line\n\
   4. A building line has the form 'building ID X Y W H' (with any number of\n\
      blank characters before or after), where\n\
        ID is the building identifier\n\
@@ -35,7 +35,14 @@ A scene is a text stream that must satisfy the following syntax:\n\
        Y is the y-coordinate of the building\n\
        W is the half-width of the building\n\
        H is the half-height of the building\n\
-  5. An antenna line has the form 'antenna ID X Y R' (with any number of\n\
+  5. A house line has the form 'house ID X Y W H' (with any number of\n\
+     blank characters before or after), where\n\
+       ID is the house identifier\n\
+       X is the x-coordinate of the house\n\
+       Y is the y-coordinate of the house\n\
+       W is the half-width of the house\n\
+       H is the half-height of the house\n\
+  6. An antenna line has the form 'antenna ID X Y R' (with any number of\n\
      blank characters before or after), where\n\
        ID is the building identifier\n\
        X is the x-coordinate of the antenna\n\
