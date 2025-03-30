@@ -9,17 +9,18 @@ d'antennes de communication pour une zone donnée.
 L'application `kover` est une application en ligne de commande qui facilite le
 positionnement d'*antennes* de communication dans une *scène* afin de desservir
 des clients de façon adéquate. Les emplacements des clients sont représentés
-par des *buildings*, qui correspondent simplement à des boîtes rectangulaires.
+par des *buildings* ou des maisons (*houses*), qui correspondent simplement
+à des boîtes rectangulaires.
 
-Le flux de texte suivant décrit une scène valide composée de trois buildings
-(identifiés par `b1`, `b2` et `b3`) et de deux antennes (identifiées par `a1`
-et `a2`):
+Le flux de texte suivant décrit une scène valide composée de deux buildings
+(identifiés par `b1` et `b2`), d'une maison (identifiée par `h`) et de deux
+antennes (identifiées par `a1` et `a2`):
 
 ```
 begin scene
   building b1 0 0 1 1
   building b2 7 8 2 3
-  building b3 15 1 4 1
+  house h 15 1 4 1
   antenna a1 5 4 6
   antenna a2 16 3 4
 end scene
@@ -28,9 +29,10 @@ end scene
 Une représentation graphique de la scène ci-haut est disponible dans le fichier
 SVG suivant:
 
-![Une scène de 3 buildings et 2 antennes](doc/scene.svg)
+![Une scène de 2 buildings, 1 maison et 2 antennes](doc/scene.svg)
 
-Plus formellement, un *building* est représenté par les éléments suivants:
+Plus formellement, un *building* et une maison (*house*) sont représentées par
+les éléments suivants:
 
 * `id`: un *identifiant* unique, sous forme de chaîne de caractères;
 * `x` et `y`: une *position* $`(x,y)`$ dans le plan, sous forme de deux entiers
@@ -38,8 +40,9 @@ Plus formellement, un *building* est représenté par les éléments suivants:
 * `w` et `h`: une *demi-largeur* et une *demi-hauteur* $`(w, h)`$, qui sont
   des entiers strictement positifs.
 
-Ainsi, les 4 points du rectangle déterminé par un building sont $`(x - w,
-y - h)`$, $`(x + w, y - h)`$, $`(x - w, y + h)`$ et $`(x + w, y + h)`$.
+Ainsi, les 4 points du rectangle déterminé par un *building* ou une maison sont
+$`(x - w, y - h)`$, $`(x + w, y - h)`$, $`(x - w, y + h)`$ et $`(x + w,
+y + h)`$.
 
 Une *antenne* est représentée par les éléments suivants:
 
@@ -49,13 +52,13 @@ Une *antenne* est représentée par les éléments suivants:
 * `r`: un rayon (ou une *portée*) $`r`$, qui est un entier strictement
   positif.
 
-Ainsi, un *building* ne peut pas avoir une aire nulle et une antenne a toujours
-une portée décrivant un disque d'aire strictement positive. Finalement, une
-*scène* est représentée par les éléments suivants:
+Ainsi, un *building* et une maison ne peuvent pas avoir une aire nulle, alors
+qu'une antenne a toujours une portée décrivant un disque d'aire strictement
+positive. Finalement, une *scène* est représentée par les éléments suivants:
 
-* `buildings`: une collection de buildings qui ne se chevauchent pas,
-  c'est-à-dire qu'une scène ne peut contenir deux buildings dont l'intersection
-  occupe une aire non nulle.
+* `buildings`: une collection de *buildings* et de maisons qui ne se
+  chevauchent pas, c'est-à-dire qu'une scène ne peut contenir deux
+  buildings/maisons dont l'intersection occupe une aire non nulle.
 * `antennas`: une collection d'antennes qui occupent des positions distinctes.
 
 Pour décrire une scène à l'aide d'un flux de texte, on convient d'utiliser une
@@ -74,7 +77,15 @@ syntaxe spécifique:
       entiers et
     * (`W`, `H`) est une paire de demi-largeur et demi-hauteur, `W` et `H`
       étant des nombres entiers strictement positifs;
-5. Une ligne décrivant une antenne correspondre à l'ERE
+5. Une ligne de type *maison* doit correspondre à l'ERE
+   `^[:blank:]*house ID X Y W H[:blank:]*$`,
+   où
+    * `ID` est l'identifiant de la maison,
+    * (`X`, `Y`) est la position de la maison, `X` et `Y` étant des nombres
+      entiers et
+    * (`W`, `H`) est une paire de demi-largeur et demi-hauteur, `W` et `H`
+      étant des nombres entiers strictement positifs;
+6. Une ligne décrivant une antenne correspondre à l'ERE
    `^[:blank:]*antenna ID X Y R[:blank:]*$`,
    où
     * `ID` est l'identifiant de l'antenne,
@@ -98,7 +109,7 @@ Des exemples de scènes valides et invalides sont donnés dans le répertoire
 
 L'application `kover` permet donc de manipuler des scènes et vise à optimiser
 le positionnement d'antennes dans ces scènes afin de couvrir adéquatement les
-buildings qui occupent cette scène.
+buildings et les maisons qui occupent cette scène.
 
 ## Installation
 
