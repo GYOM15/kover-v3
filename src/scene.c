@@ -353,7 +353,8 @@ void print_scene_summary(const struct Scene* scene) {
 void print_scene_buildings(const struct Scene* scene) {
   for (unsigned int b = 0; b < scene->num_buildings; ++b) {
     const struct Building* building = scene->buildings + b;
-    printf("  building %s at %d %d with dimensions %d %d\n",
+    printf("  %s %s at %d %d with dimensions %d %d\n",
+           building->is_house ? "house" : "building",
            building->id, building->x, building->y, building->w, building->h);
   }
 }

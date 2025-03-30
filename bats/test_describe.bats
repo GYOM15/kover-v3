@@ -47,6 +47,21 @@ setup() {
   assert_line --index 3 "  building b3 at -2 -2 with dimensions 1 1"
 }
 
+@test "kover describe runs correctly on a scene with 1 house" {
+  run kover describe < "$examples_dir"/1h.scene
+  assert_success
+  assert_line --index 0 "A scene with 1 house"
+  assert_line --index 1 "  house h1 at 0 0 with dimensions 1 1"
+}
+
+@test "kover describe runs correctly on a scene with 2 houses" {
+  run kover describe < "$examples_dir"/2h.scene
+  assert_success
+  assert_line --index 0 "A scene with 2 houses"
+  assert_line --index 1 "  house h1 at 0 0 with dimensions 1 1"
+  assert_line --index 2 "  house h2 at 5 8 with dimensions 2 3"
+}
+
 @test "kover describe runs correctly on a scene with 1 antenna" {
   run kover describe < "$examples_dir"/1a.scene
   assert_success
@@ -76,6 +91,31 @@ setup() {
   assert_line --index 0 "A scene with 1 building and 1 antenna"
   assert_line --index 1 "  building b1 at 0 0 with dimensions 1 1"
   assert_line --index 2 "  antenna a1 at 2 3 with range 5"
+}
+
+@test "kover describe runs correctly on a scene with 1 building and 1 house" {
+  run kover describe < "$examples_dir"/1b1h.scene
+  assert_success
+  assert_line --index 0 "A scene with 1 building and 1 house"
+  assert_line --index 1 "  building b1 at 0 0 with dimensions 1 1"
+  assert_line --index 2 "  house h1 at 4 5 with dimensions 1 1"
+}
+
+@test "kover describe runs correctly on a scene with 1 house and 1 antenna" {
+  run kover describe < "$examples_dir"/1h1a.scene
+  assert_success
+  assert_line --index 0 "A scene with 1 house and 1 antenna"
+  assert_line --index 1 "  house h1 at 0 0 with dimensions 1 1"
+  assert_line --index 2 "  antenna a1 at 2 3 with range 5"
+}
+
+@test "kover describe runs correctly on a scene with 1 building, 1 house and 1 antenna" {
+  run kover describe < "$examples_dir"/1b1h1a.scene
+  assert_success
+  assert_line --index 0 "A scene with 1 building, 1 house and 1 antenna"
+  assert_line --index 1 "  building b1 at 0 0 with dimensions 1 1"
+  assert_line --index 2 "  house h1 at 4 5 with dimensions 1 1"
+  assert_line --index 3 "  antenna a1 at 2 2 with range 1"
 }
 
 # Wrong usage
