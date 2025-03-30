@@ -88,6 +88,7 @@ void run_quality_subcommand(void) {
   struct Scene scene;
   load_scene_from_stdin(&scene, false);
   validate_scene(&scene, false);
+  print_scene_quality(&scene);
 }
 
 /**

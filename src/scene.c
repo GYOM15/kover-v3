@@ -336,6 +336,10 @@ const char* construction_type(const struct Construction* construction) {
   return "??";
 }
 
+void print_scene_quality(const struct Scene* scene) {
+  puts("Nothing to report, scene is empty");
+}
+
 void print_scene_summary(const struct Scene* scene) {
   int num_buildings = scene_num_buildings(scene),
       num_houses = scene_num_houses(scene),

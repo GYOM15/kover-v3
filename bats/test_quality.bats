@@ -9,6 +9,12 @@ setup() {
 # Normal usage
 # ------------
 
+@test "kover quality runs correctly on an empty scene" {
+  run kover quality < "$examples_dir"/empty.scene
+  assert_success
+  assert_output "Nothing to report, scene is empty"
+}
+
 # Wrong usage
 # -----------
 
