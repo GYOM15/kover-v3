@@ -180,7 +180,7 @@ bool load_building_from_parsed_line(const struct ParsedLine* parsed_line,
       strcmp(parsed_line->tokens[0], "house") != 0)
     return false;
   if (parsed_line->num_tokens != 6)
-    report_error_line_wrong_arguments_number("building",
+    report_error_line_wrong_arguments_number(parsed_line->tokens[0],
                                              parsed_line->line_number,
                                              validate);
   if (!is_valid_id(parsed_line->tokens[1]))

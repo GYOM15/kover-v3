@@ -133,6 +133,48 @@ setup() {
   assert_line "error: house h1 and house h2 are overlapping"
 }
 
+@test "kover validate reports an error when a house line has a wrong number of arguments" {
+  run kover validate < "$examples_dir"/1h_wrong_number_of_arguments.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line "error: house line has wrong number of arguments (line #2)"
+}
+
+@test "kover validate reports an error when a house line has an invalid identifier" {
+  run kover validate < "$examples_dir"/1h_wrong_id.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line 'error: invalid identifier "h^" (line #2)'
+}
+
+@test "kover validate reports an error when a house line has an invalid x" {
+  run kover validate < "$examples_dir"/1h_wrong_x.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line 'error: invalid integer "a" (line #2)'
+}
+
+@test "kover validate reports an error when a house line has an invalid y" {
+  run kover validate < "$examples_dir"/1h_wrong_y.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line 'error: invalid integer "02" (line #2)'
+}
+
+@test "kover validate reports an error when a house line has an invalid w" {
+  run kover validate < "$examples_dir"/1h_wrong_w.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line 'error: invalid positive integer "c" (line #2)'
+}
+
+@test "kover validate reports an error when a house line has an invalid h" {
+  run kover validate < "$examples_dir"/1h_wrong_h.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line 'error: invalid positive integer "-2" (line #2)'
+}
+
 # Wrong antennas
 # --------------
 
