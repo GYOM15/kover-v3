@@ -326,21 +326,27 @@ int scene_num_houses(const struct Scene* scene) {
 
 void print_scene_summary(const struct Scene* scene) {
   int num_buildings = scene_num_buildings(scene),
-      num_houses = scene_num_houses(scene);
+      num_houses = scene_num_houses(scene),
+      num_antennas = scene->num_antennas;
   if (scene_is_empty(scene)) {
     puts("An empty scene");
     return;
   }
   printf("A scene with ");
-  if (num_buildings > 0)
+  if (num_buildings > 0) {
     printf("%d building%s", num_buildings, num_buildings > 1 ? "s" : "");
-  if (num_houses > 0)
+    if (num_houses > 0 && num_antennas > 0)
+      printf(", ");
+    else if (num_houses > 0 || num_antennas > 0)
+      printf(" and ");
+  }
+  if (num_houses > 0) {
     printf("%d house%s", num_houses, num_houses > 1 ? "s" : "");
-  if (scene->num_buildings > 0 && scene->num_antennas > 0)
-    printf(" and ");
-  if (scene->num_antennas > 0)
-    printf("%d antenna%s", scene->num_antennas,
-           scene->num_antennas > 1 ? "s" : "");
+    if (num_antennas > 0)
+      printf(" and ");
+  }
+  if (num_antennas > 0)
+    printf("%d antenna%s", num_antennas, num_antennas > 1 ? "s" : "");
   printf("\n");
 }
 
