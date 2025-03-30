@@ -50,24 +50,24 @@ bool are_intervals_overlapping(int a1, int b1, int a2, int b2) {
 }
 
 /**
- * Indicates if two buildings are overlapping
+ * Indicates if two constructions are overlapping
  *
- * Two building are overlapping if their intersection has a strictly positive
- * area.
+ * Two constructions are overlapping if their intersection has a strictly
+ * positive area.
  *
- * @param building1  The first building
- * @param building2  The second building
+ * @param construction1  The first construction
+ * @param construction2  The second construction
  */
-bool are_building_overlapping(const struct Building* building1,
-                              const struct Building* building2) {
-  return are_intervals_overlapping(building1->x - building1->w,
-                                   building1->x + building1->w,
-                                   building2->x - building2->w,
-                                   building2->x + building2->w) &&
-         are_intervals_overlapping(building1->y - building1->h,
-                                   building1->y + building1->h,
-                                   building2->y - building2->h,
-                                   building2->y + building2->h);
+bool are_constructions_overlapping(const struct Construction* construction1,
+                                   const struct Construction* construction2) {
+  return are_intervals_overlapping(construction1->x - construction1->w,
+                                   construction1->x + construction1->w,
+                                   construction2->x - construction2->w,
+                                   construction2->x + construction2->w) &&
+         are_intervals_overlapping(construction1->y - construction1->h,
+                                   construction1->y + construction1->h,
+                                   construction2->y - construction2->h,
+                                   construction2->y + construction2->h);
 }
 
 /**
@@ -82,20 +82,21 @@ bool have_antennas_same_position(const struct Antenna* antenna1,
 }
 
 /**
- * Checks if the buildings of a scene are valid.
+ * Checks if the constructions of a scene are valid.
  *
  * @param scene     The scene to validate
  * @param validate  Has the validate subcommand been invoked?
  */
-void validate_buildings(const struct Scene* scene, bool validate) {
-  for (unsigned int b1 = 0; b1 < scene->num_buildings; ++b1)
-    for (unsigned int b2 = b1 + 1; b2 < scene->num_buildings; ++b2) {
-      const struct Building* building1 = scene->buildings + b1,
-                           * building2 = scene->buildings + b2;
-      if (are_building_overlapping(building1, building2))
+void validate_constructions(const struct Scene* scene, bool validate) {
+  for (unsigned int c1 = 0; c1 < scene->num_constructions; ++c1)
+    for (unsigned int c2 = c1 + 1; c2 < scene->num_constructions; ++c2) {
+      const struct Construction
+        *construction1 = scene->constructions + c1,
+        *construction2 = scene->constructions + c2;
+      if (are_constructions_overlapping(construction1, construction2))
         report_error_overlapping_objects(
-          building_type(building1), building1->id,
-          building_type(building2), building2->id,
+          construction_type(construction1), construction1->id,
+          construction_type(construction2), construction2->id,
           validate);
     }
 }
@@ -164,16 +165,16 @@ void parse_line(const char* line,
 }
 
 /**
- * Loads a building from a parsed line
+ * Loads a construction from a parsed line
  *
  * @param parsed_line  The parsed line
- * @param scene        The scene in which the building is loaded
+ * @param scene        The scene in which the construction is loaded
  * @param validate     Has the subcommand validate been invoked?
  * @return             true if and only if the loading was successful
  */
-bool load_building_from_parsed_line(const struct ParsedLine* parsed_line,
-                                    struct Scene* scene,
-                                    bool validate) {
+bool load_construction_from_parsed_line(const struct ParsedLine* parsed_line,
+                                        struct Scene* scene,
+                                        bool validate) {
   if (strcmp(parsed_line->tokens[0], "building") != 0 &&
       strcmp(parsed_line->tokens[0], "house") != 0)
     return false;
@@ -201,14 +202,15 @@ bool load_building_from_parsed_line(const struct ParsedLine* parsed_line,
       report_error_invalid_positive_int(parsed_line->tokens[5],
                                         parsed_line->line_number,
                                         validate);
-  struct Building building;
-  strncpy(building.id, parsed_line->tokens[1], MAX_LENGTH_ID);
-  building.is_house = strcmp(parsed_line->tokens[0], "house") == 0;
-  building.x = atoi(parsed_line->tokens[2]);
-  building.y = atoi(parsed_line->tokens[3]);
-  building.w = atoi(parsed_line->tokens[4]);
-  building.h = atoi(parsed_line->tokens[5]);
-  add_building(scene, &building, validate);
+  struct Construction construction;
+  strncpy(construction.id, parsed_line->tokens[1], MAX_LENGTH_ID);
+  construction.type = strcmp(parsed_line->tokens[0], "building") == 0 ?
+    BUILDING : HOUSE;
+  construction.x = atoi(parsed_line->tokens[2]);
+  construction.y = atoi(parsed_line->tokens[3]);
+  construction.w = atoi(parsed_line->tokens[4]);
+  construction.h = atoi(parsed_line->tokens[5]);
+  add_construction(scene, &construction, validate);
   return true;
 }
 
@@ -261,7 +263,7 @@ bool load_antenna_from_parsed_line(const struct ParsedLine* parsed_line,
 // ------------
 
 void initialize_empty_scene(struct Scene* scene) {
-  scene->num_buildings = 0;
+  scene->num_constructions = 0;
   scene->num_antennas = 0;
 }
 
@@ -287,7 +289,7 @@ void load_scene_from_stdin(struct Scene* scene, bool validate) {
         fprintf(stderr, "error: line has no token\n");
         exit(1);
       }
-      if (!load_building_from_parsed_line(&parsed_line, scene, validate) &&
+      if (!load_construction_from_parsed_line(&parsed_line, scene, validate) &&
           !load_antenna_from_parsed_line(&parsed_line, scene, validate))
         report_error_unrecognized_line(line_number, validate);
     }
@@ -301,7 +303,7 @@ void load_scene_from_stdin(struct Scene* scene, bool validate) {
 // ----------
 
 void validate_scene(const struct Scene* scene, bool validate) {
-  validate_buildings(scene, validate);
+  validate_constructions(scene, validate);
   validate_antennas(scene, validate);
 }
 
@@ -309,25 +311,29 @@ void validate_scene(const struct Scene* scene, bool validate) {
 // ---------
 
 bool scene_is_empty(const struct Scene* scene) {
-  return scene->num_buildings == 0 && scene->num_antennas == 0;
+  return scene->num_constructions == 0 && scene->num_antennas == 0;
 }
 
 int scene_num_buildings(const struct Scene* scene) {
   int num_buildings = 0;
-  for (unsigned int b = 0; b < scene->num_buildings; ++b)
-    num_buildings += scene->buildings[b].is_house ? 0 : 1;
+  for (unsigned int c = 0; c < scene->num_constructions; ++c)
+    num_buildings += scene->constructions[c].type == BUILDING;
   return num_buildings;
 }
 
 int scene_num_houses(const struct Scene* scene) {
   int num_houses = 0;
-  for (unsigned int b = 0; b < scene->num_buildings; ++b)
-    num_houses += scene->buildings[b].is_house ? 1 : 0;
+  for (unsigned int c = 0; c < scene->num_constructions; ++c)
+    num_houses += scene->constructions[c].type == HOUSE;
   return num_houses;
 }
 
-const char* building_type(const struct Building* building) {
-  return building->is_house ? "house" : "building";
+const char* construction_type(const struct Construction* construction) {
+  switch (construction->type) {
+    case BUILDING: return "building";
+    case HOUSE:    return "house";
+  }
+  return "??";
 }
 
 void print_scene_summary(const struct Scene* scene) {
@@ -356,11 +362,14 @@ void print_scene_summary(const struct Scene* scene) {
   printf("\n");
 }
 
-void print_scene_buildings(const struct Scene* scene) {
-  for (unsigned int b = 0; b < scene->num_buildings; ++b) {
-    const struct Building* building = scene->buildings + b;
-    printf("  %s %s at %d %d with dimensions %d %d\n", building_type(building),
-           building->id, building->x, building->y, building->w, building->h);
+void print_scene_constructions(const struct Scene* scene) {
+  for (unsigned int c = 0; c < scene->num_constructions; ++c) {
+    const struct Construction* construction = scene->constructions + c;
+    printf("  %s %s at %d %d with dimensions %d %d\n",
+           construction_type(construction),
+           construction->id,
+           construction->x, construction->y,
+           construction->w, construction->h);
   }
 }
 
@@ -379,11 +388,11 @@ void print_scene_bounding_box(const struct Scene* scene) {
   }
   int xmin = INT_MAX, xmax = INT_MIN,
       ymin = INT_MAX, ymax = INT_MIN;
-  for (unsigned int b = 0; b < scene->num_buildings; ++b) {
-    int x = scene->buildings[b].x,
-        y = scene->buildings[b].y,
-        w = scene->buildings[b].w,
-        h = scene->buildings[b].h;
+  for (unsigned int c = 0; c < scene->num_constructions; ++c) {
+    int x = scene->constructions[c].x,
+        y = scene->constructions[c].y,
+        w = scene->constructions[c].w,
+        h = scene->constructions[c].h;
     xmin = x - w < xmin ? x - w : xmin;
     xmax = x + w > xmax ? x + w : xmax;
     ymin = y - h < ymin ? y - h : ymin;
@@ -404,27 +413,27 @@ void print_scene_bounding_box(const struct Scene* scene) {
 // Modifiers
 // ---------
 
-void add_building(struct Scene* scene,
-                  const struct Building* building,
-                  bool validate) {
-  unsigned int b = 0;
-  while (b < scene->num_buildings &&
-         strcmp(building->id, scene->buildings[b].id) > 0)
-    ++b;
-  if (b < scene->num_buildings &&
-      strcmp(building->id, scene->buildings[b].id) == 0)
-    report_error_non_unique_identifiers(building_type(building),
-                                        building->id, validate);
-  for (unsigned int b2 = scene->num_buildings; b2 > b; --b2)
-    scene->buildings[b2] = scene->buildings[b2 - 1];
-  struct Building* scene_building = scene->buildings + b;
-  strncpy(scene_building->id, building->id, MAX_LENGTH_ID);
-  scene_building->is_house = building->is_house;
-  scene_building->x = building->x;
-  scene_building->y = building->y;
-  scene_building->w = building->w;
-  scene_building->h = building->h;
-  ++scene->num_buildings;
+void add_construction(struct Scene* scene,
+                      const struct Construction* construction,
+                      bool validate) {
+  unsigned int c = 0;
+  while (c < scene->num_constructions &&
+         strcmp(construction->id, scene->constructions[c].id) > 0)
+    ++c;
+  if (c < scene->num_constructions &&
+      strcmp(construction->id, scene->constructions[c].id) == 0)
+    report_error_non_unique_identifiers(construction_type(construction),
+                                        construction->id, validate);
+  for (unsigned int c2 = scene->num_constructions; c2 > c; --c2)
+    scene->constructions[c2] = scene->constructions[c2 - 1];
+  struct Construction* scene_construction = scene->constructions + c;
+  strncpy(scene_construction->id, construction->id, MAX_LENGTH_ID);
+  scene_construction->type = construction->type;
+  scene_construction->x = construction->x;
+  scene_construction->y = construction->y;
+  scene_construction->w = construction->w;
+  scene_construction->h = construction->h;
+  ++scene->num_constructions;
 }
 
 void add_antenna(struct Scene* scene,

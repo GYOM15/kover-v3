@@ -8,27 +8,35 @@
 
 // The maximum length of an identifier
 #define MAX_LENGTH_ID 10
-// The maximum number of buildings in a scene
-#define NUM_MAX_BUILDINGS 100
+// The maximum number of constructions in a scene
+#define NUM_MAX_CONSTRUCTIONS 100
 // The maximum number of antennas in a scene
 #define NUM_MAX_ANTENNAS 100
 
 // Types
 // -----
 
-// A building
-struct Building {
-  // The identifier of the building
+// A type of construction
+enum ConstructionType {
+  // A building
+  BUILDING,
+  // A house
+  HOUSE
+};
+
+// A construction
+struct Construction {
+  // The identifier of the construction
   char id[MAX_LENGTH_ID + 1];
-  // Is the building a house?
-  bool is_house;
-  // The x coordinate of the building
+  // The type of the construction
+  enum ConstructionType type;
+  // The x coordinate of the construction
   int x;
-  // The y coordinate of the building
+  // The y coordinate of the construction
   int y;
-  // The half width of the building (half length in x direction)
+  // The half width of the construction (half length in x direction)
   int w;
-  // The half height of the building (half length in y direction)
+  // The half height of the construction (half length in y direction)
   int h;
 };
 
@@ -46,10 +54,10 @@ struct Antenna {
 
 // A scene
 struct Scene {
-  // The number of building in the scene
-  unsigned int num_buildings;
-  // The buildings of the scene
-  struct Building buildings[NUM_MAX_BUILDINGS];
+  // The number of constructions in the scene
+  unsigned int num_constructions;
+  // The constructions of the scene
+  struct Construction constructions[NUM_MAX_CONSTRUCTIONS];
   // The number of antennas in the scene
   unsigned int num_antennas;
   // The antennas of the scene
@@ -116,12 +124,12 @@ int scene_num_buildings(const struct Scene* scene);
 int scene_num_houses(const struct Scene* scene);
 
 /**
- * Returns the type of building
+ * Returns the type of construction as a string
  *
- * @param building  The building
- * @return          The type
+ * @param construction  The construction
+ * @return              The type
  */
-const char* building_type(const struct Building* building);
+const char* construction_type(const struct Construction* construction);
 
 /**
  * Prints a summary of the scene on stdout
@@ -131,11 +139,11 @@ const char* building_type(const struct Building* building);
 void print_scene_summary(const struct Scene* scene);
 
 /**
- * Prints the building of the scene to stdout
+ * Prints the construction of the scene to stdout
  *
- * @param scene  The scene whose buildings are printed
+ * @param scene  The scene whose constructions are printed
  */
-void print_scene_buildings(const struct Scene* scene);
+void print_scene_constructions(const struct Scene* scene);
 
 /**
  * Prints the antenna of the scene to stdout
@@ -155,15 +163,15 @@ void print_scene_bounding_box(const struct Scene* scene);
 // ---------
 
 /**
- * Adds a building to a scene
+ * Adds a construction to a scene
  *
- * @param scene     The scene to which the building is added
- * @param building  The building to add
- * @param validate  Has the validate subcommand been invoked?
+ * @param scene         The scene to which the construction is added
+ * @param construction  The construction to add
+ * @param validate      Has the validate subcommand been invoked?
  */
-void add_building(struct Scene* scene,
-                  const struct Building* building,
-                  bool validate);
+void add_construction(struct Scene* scene,
+                      const struct Construction* construction,
+                      bool validate);
 
 /**
  * Adds an antenna to a scene

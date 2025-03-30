@@ -103,7 +103,7 @@ void report_error_scene_first_line(bool validate);
 void report_error_unrecognized_line(int line_number, bool validate);
 
 /**
- * Reports on stderr that a building line has the wrong number of arguments
+ * Reports on stderr that an object line has the wrong number of arguments
  *
  * @param object       The object on the line
  * @param line_number  The number of the unrecognized line

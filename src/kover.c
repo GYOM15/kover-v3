@@ -44,7 +44,7 @@ A scene is a text stream that must satisfy the following syntax:\n\
        H is the half-height of the house\n\
   6. An antenna line has the form 'antenna ID X Y R' (with any number of\n\
      blank characters before or after), where\n\
-       ID is the building identifier\n\
+       ID is the antenna identifier\n\
        X is the x-coordinate of the antenna\n\
        Y is the y-coordinate of the antenna\n\
        R is the radius scope of the antenna\n"
@@ -70,7 +70,7 @@ void run_describe_subcommand(void) {
   load_scene_from_stdin(&scene, false);
   validate_scene(&scene, false);
   print_scene_summary(&scene);
-  print_scene_buildings(&scene);
+  print_scene_constructions(&scene);
   print_scene_antennas(&scene);
 }
 
