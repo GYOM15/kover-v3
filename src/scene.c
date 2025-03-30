@@ -260,6 +260,7 @@ void load_scene_from_stdin(struct Scene* scene) {
       struct ParsedLine parsed_line;
       parse_line(line, &parsed_line, line_number);
       if (parsed_line.num_tokens == 0) {
+        printf("not ok\n");
         fprintf(stderr, "error: line has no token\n");
         exit(1);
       }
