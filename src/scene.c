@@ -84,30 +84,34 @@ bool have_antennas_same_position(const struct Antenna* antenna1,
 /**
  * Checks if the buildings of a scene are valid.
  *
- * @param scene  The scene to validate
+ * @param scene     The scene to validate
+ * @param validate  Has the validate subcommand been invoked?
  */
-void validate_buildings(const struct Scene* scene) {
+void validate_buildings(const struct Scene* scene, bool validate) {
   for (unsigned int b1 = 0; b1 < scene->num_buildings; ++b1)
     for (unsigned int b2 = b1 + 1; b2 < scene->num_buildings; ++b2) {
       const struct Building* building1 = scene->buildings + b1,
                            * building2 = scene->buildings + b2;
       if (are_building_overlapping(building1, building2))
-        report_error_overlapping_buildings(building1->id, building2->id);
+        report_error_overlapping_buildings(building1->id, building2->id,
+                                           validate);
     }
 }
 
 /**
  * Checks if the antennas of a scene are valid.
  *
- * @param scene  The scene to validate
+ * @param scene     The scene to validate
+ * @param validate  Has the validate subcommand been invoked?
  */
-void validate_antennas(const struct Scene* scene) {
+void validate_antennas(const struct Scene* scene, bool validate) {
   for (unsigned int a1 = 0; a1 < scene->num_antennas; ++a1)
     for (unsigned int a2 = a1 + 1; a2 < scene->num_antennas; ++a2) {
       const struct Antenna* antenna1 = scene->antennas + a1,
                           * antenna2 = scene->antennas + a2;
       if (have_antennas_same_position(antenna1, antenna2))
-        report_error_same_position_antennas(antenna1->id, antenna2->id);
+        report_error_same_position_antennas(antenna1->id, antenna2->id,
+                                            validate);
     }
 }
 
@@ -162,37 +166,45 @@ void parse_line(const char* line,
  *
  * @param parsed_line  The parsed line
  * @param scene        The scene in which the building is loaded
+ * @param validate     Has the subcommand validate been invoked?
  * @return             true if and only if the loading was successful
  */
 bool load_building_from_parsed_line(const struct ParsedLine* parsed_line,
-                                    struct Scene* scene) {
+                                    struct Scene* scene,
+                                    bool validate) {
   if (strcmp(parsed_line->tokens[0], "building") != 0)
     return false;
   if (parsed_line->num_tokens != 6)
     report_error_line_wrong_arguments_number("building",
-                                             parsed_line->line_number);
+                                             parsed_line->line_number,
+                                             validate);
   if (!is_valid_id(parsed_line->tokens[1]))
       report_error_invalid_identifier(parsed_line->tokens[1],
-                                      parsed_line->line_number);
+                                      parsed_line->line_number,
+                                      validate);
   if (!is_valid_integer(parsed_line->tokens[2]))
       report_error_invalid_int(parsed_line->tokens[2],
-                               parsed_line->line_number);
+                               parsed_line->line_number,
+                               validate);
   if (!is_valid_integer(parsed_line->tokens[3]))
       report_error_invalid_int(parsed_line->tokens[3],
-                               parsed_line->line_number);
+                               parsed_line->line_number,
+                               validate);
   if (!is_valid_positive_integer(parsed_line->tokens[4]))
       report_error_invalid_positive_int(parsed_line->tokens[4],
-                                        parsed_line->line_number);
+                                        parsed_line->line_number,
+                                        validate);
   if (!is_valid_positive_integer(parsed_line->tokens[5]))
       report_error_invalid_positive_int(parsed_line->tokens[5],
-                                        parsed_line->line_number);
+                                        parsed_line->line_number,
+                                        validate);
   struct Building building;
   strncpy(building.id, parsed_line->tokens[1], MAX_LENGTH_ID);
   building.x = atoi(parsed_line->tokens[2]);
   building.y = atoi(parsed_line->tokens[3]);
   building.w = atoi(parsed_line->tokens[4]);
   building.h = atoi(parsed_line->tokens[5]);
-  add_building(scene, &building);
+  add_building(scene, &building, validate);
   return true;
 }
 
@@ -201,33 +213,40 @@ bool load_building_from_parsed_line(const struct ParsedLine* parsed_line,
  *
  * @param parsed_line  The parsed line
  * @param scene        The scene in which the antenna is loaded
+ * @param validate     Has the subcommand validate been invoked?
  * @return             true if and only if the loading was successful
  */
 bool load_antenna_from_parsed_line(const struct ParsedLine* parsed_line,
-                                   struct Scene* scene) {
+                                   struct Scene* scene,
+                                   bool validate) {
   if (strcmp(parsed_line->tokens[0], "antenna") != 0)
     return false;
   if (parsed_line->num_tokens != 5)
     report_error_line_wrong_arguments_number("antenna",
-                                             parsed_line->line_number);
+                                             parsed_line->line_number,
+                                             validate);
   if (!is_valid_id(parsed_line->tokens[1]))
       report_error_invalid_identifier(parsed_line->tokens[1],
-                                      parsed_line->line_number);
+                                      parsed_line->line_number,
+                                      validate);
   if (!is_valid_integer(parsed_line->tokens[2]))
       report_error_invalid_int(parsed_line->tokens[2],
-                               parsed_line->line_number);
+                               parsed_line->line_number,
+                               validate);
   if (!is_valid_integer(parsed_line->tokens[3]))
       report_error_invalid_int(parsed_line->tokens[3],
-                               parsed_line->line_number);
+                               parsed_line->line_number,
+                               validate);
   if (!is_valid_positive_integer(parsed_line->tokens[4]))
       report_error_invalid_positive_int(parsed_line->tokens[4],
-                                        parsed_line->line_number);
+                                        parsed_line->line_number,
+                                        validate);
   struct Antenna antenna;
   strncpy(antenna.id, parsed_line->tokens[1], MAX_LENGTH_ID);
   antenna.x = atoi(parsed_line->tokens[2]);
   antenna.y = atoi(parsed_line->tokens[3]);
   antenna.r = atoi(parsed_line->tokens[4]);
-  add_antenna(scene, &antenna);
+  add_antenna(scene, &antenna, validate);
   return true;
 }
 
@@ -242,7 +261,7 @@ void initialize_empty_scene(struct Scene* scene) {
   scene->num_antennas = 0;
 }
 
-void load_scene_from_stdin(struct Scene* scene) {
+void load_scene_from_stdin(struct Scene* scene, bool validate) {
   initialize_empty_scene(scene);
   char line[MAX_LENGTH + 1];
   bool first_line = true, last_line = false;
@@ -252,7 +271,7 @@ void load_scene_from_stdin(struct Scene* scene) {
     line[strcspn(line, "\n")] = '\0';
     if (first_line) {
       if (!is_begin_scene_line(line))
-        report_error_scene_first_line();
+        report_error_scene_first_line(validate);
       first_line = false;
     } else if (is_end_scene_line(line)) {
       last_line = true;
@@ -260,25 +279,26 @@ void load_scene_from_stdin(struct Scene* scene) {
       struct ParsedLine parsed_line;
       parse_line(line, &parsed_line, line_number);
       if (parsed_line.num_tokens == 0) {
+        printf("not ok\n");
         fprintf(stderr, "error: line has no token\n");
         exit(1);
       }
-      if (!load_building_from_parsed_line(&parsed_line, scene) &&
-          !load_antenna_from_parsed_line(&parsed_line, scene))
-        report_error_unrecognized_line(line_number);
+      if (!load_building_from_parsed_line(&parsed_line, scene, validate) &&
+          !load_antenna_from_parsed_line(&parsed_line, scene, validate))
+        report_error_unrecognized_line(line_number, validate);
     }
     ++line_number;
   }
   if (!last_line)
-    report_error_scene_last_line();
+    report_error_scene_last_line(validate);
 }
 
 // Validation
 // ----------
 
-void validate_scene(const struct Scene* scene) {
-  validate_buildings(scene);
-  validate_antennas(scene);
+void validate_scene(const struct Scene* scene, bool validate) {
+  validate_buildings(scene, validate);
+  validate_antennas(scene, validate);
 }
 
 // Accessors
@@ -353,14 +373,16 @@ void print_scene_bounding_box(const struct Scene* scene) {
 // Modifiers
 // ---------
 
-void add_building(struct Scene* scene, const struct Building* building) {
+void add_building(struct Scene* scene,
+                  const struct Building* building,
+                  bool validate) {
   unsigned int b = 0;
   while (b < scene->num_buildings &&
          strcmp(building->id, scene->buildings[b].id) > 0)
     ++b;
   if (b < scene->num_buildings &&
       strcmp(building->id, scene->buildings[b].id) == 0)
-    report_error_non_unique_identifiers("building", building->id);
+    report_error_non_unique_identifiers("building", building->id, validate);
   for (unsigned int b2 = scene->num_buildings; b2 > b; --b2)
     scene->buildings[b2] = scene->buildings[b2 - 1];
   struct Building* scene_building = scene->buildings + b;
@@ -372,14 +394,16 @@ void add_building(struct Scene* scene, const struct Building* building) {
   ++scene->num_buildings;
 }
 
-void add_antenna(struct Scene* scene, const struct Antenna* antenna) {
+void add_antenna(struct Scene* scene,
+                 const struct Antenna* antenna,
+                 bool validate) {
   unsigned int a = 0;
   while (a < scene->num_antennas &&
          strcmp(antenna->id, scene->antennas[a].id) > 0)
     ++a;
   if (a < scene->num_antennas &&
       strcmp(antenna->id, scene->antennas[a].id) == 0)
-    report_error_non_unique_identifiers("antenna", antenna->id);
+    report_error_non_unique_identifiers("antenna", antenna->id, validate);
   for (unsigned int a2 = scene->num_antennas; a2 > a; --a2)
     scene->antennas[a2] = scene->antennas[a2 - 1];
   struct Antenna* scene_antenna = scene->antennas + a;

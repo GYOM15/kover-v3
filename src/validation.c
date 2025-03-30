@@ -50,40 +50,61 @@ bool is_valid_positive_integer(const char* s) {
 // Error reporting
 // ---------------
 
-void report_error_non_unique_identifiers(const char* object, const char* id) {
+void report_error_non_unique_identifiers(const char* object,
+                                         const char* id,
+                                         bool validate) {
+  if (validate)
+    printf("not ok\n");
   fprintf(stderr, "error: %s identifier %s is non unique\n", object, id);
   exit(1);
 }
 
-void report_error_invalid_identifier(const char* id, int line_number) {
+void report_error_invalid_identifier(const char* id,
+                                     int line_number,
+                                     bool validate) {
+  if (validate)
+    printf("not ok\n");
   fprintf(stderr, "error: invalid identifier \"%s\" (line #%d)\n", id,
           line_number);
   exit(1);
 }
 
-void report_error_invalid_int(const char* s, int line_number) {
+void report_error_invalid_int(const char* s, int line_number, bool validate) {
+  if (validate)
+    printf("not ok\n");
   fprintf(stderr, "error: invalid integer \"%s\" (line #%d)\n", s, line_number);
   exit(1);
 }
 
-void report_error_invalid_positive_int(const char* s, int line_number) {
+void report_error_invalid_positive_int(const char* s,
+                                       int line_number,
+                                       bool validate) {
+  if (validate)
+    printf("not ok\n");
   fprintf(stderr, "error: invalid positive integer \"%s\" (line #%d)\n", s,
           line_number);
   exit(1);
 }
 
-void report_error_scene_first_line(void) {
+void report_error_scene_first_line(bool validate) {
+  if (validate)
+    printf("not ok\n");
   fprintf(stderr, "error: first line must be exactly 'begin scene'\n");
   exit(1);
 }
 
-void report_error_unrecognized_line(int line_number) {
+void report_error_unrecognized_line(int line_number, bool validate) {
+  if (validate)
+    printf("not ok\n");
   fprintf(stderr, "error: unrecognized line (line #%d)\n", line_number);
   exit(1);
 }
 
 void report_error_line_wrong_arguments_number(const char* object,
-                                              int line_number) {
+                                              int line_number,
+                                              bool validate) {
+  if (validate)
+    printf("not ok\n");
   fprintf(stderr,
           "error: %s line has wrong number of arguments (line #%d)\n",
           object,
@@ -91,17 +112,27 @@ void report_error_line_wrong_arguments_number(const char* object,
   exit(1);
 }
 
-void report_error_scene_last_line(void) {
+void report_error_scene_last_line(bool validate) {
+  if (validate)
+    printf("not ok\n");
   fprintf(stderr, "error: last line must be exactly 'end scene'\n");
   exit(1);
 }
 
-void report_error_overlapping_buildings(const char* id1, const char* id2) {
+void report_error_overlapping_buildings(const char* id1,
+                                        const char* id2,
+                                        bool validate) {
+  if (validate)
+    printf("not ok\n");
   fprintf(stderr, "error: buildings %s and %s are overlapping\n", id1, id2);
   exit(1);
 }
 
-void report_error_same_position_antennas(const char* id1, const char* id2) {
+void report_error_same_position_antennas(const char* id1,
+                                         const char* id2,
+                                         bool validate) {
+  if (validate)
+    printf("not ok\n");
   fprintf(stderr, "error: antennas %s and %s have the same position\n",
           id1, id2);
   exit(1);

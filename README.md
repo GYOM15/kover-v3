@@ -148,7 +148,7 @@ Un rapport Bats est alors affiché sur la sortie standard.
 
 ## Utilisation
 
-L'application `kover` supporte actuellement 4 sous-commandes.
+L'application `kover` supporte actuellement 5 sous-commandes.
 
 Elles sont présentées en ordre alphabétique dans les sous-sections suivantes.
 
@@ -190,4 +190,17 @@ On peut en tout temps avoir un résumé de la scène lue sur l'entrée standard
 ```sh
 $ kover summarize < examples/1b1a.scene
 A scene with 1 building and 1 antenna
+```
+
+### `kover validate`
+
+On peut en tout temps vérifier si une scène lue sur l'entrée standard est
+valide à l'aide de la sous-commande `validate`:
+
+```sh
+$ kover validate < examples/empty.scene
+ok
+$ kover validate < examples/first_line.invalid
+not ok
+error: first line must be exactly 'begin scene'
 ```

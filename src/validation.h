@@ -48,81 +48,104 @@ bool is_valid_positive_integer(const char* s);
 /**
  * Reports on stderr that a given object identifier is not unique
  *
- * @param object  The object
- * @param id      The identifier
+ * @param object    The object
+ * @param id        The identifier
+ * @param validate  Has the validate subcommand been used?
  */
-void report_error_non_unique_identifiers(const char* object, const char* id);
+void report_error_non_unique_identifiers(const char* object,
+                                         const char* id,
+                                         bool validate);
 
 /**
  * Reports on stderr that an identifier is invalid
  *
  * @param id           The identifier
  * @param line_number  The line number
+ * @param validate     Has the validate subcommand been used?
  */
-void report_error_invalid_identifier(const char* id, int line_number);
+void report_error_invalid_identifier(const char* id,
+                                     int line_number,
+                                     bool validate);
 
 /**
  * Reports on stderr that a string is not a valid integer
  *
  * @param s            The string
  * @param line_number  The line number
+ * @param validate     Has the validate subcommand been used?
  */
-void report_error_invalid_int(const char* s, int line_number);
+void report_error_invalid_int(const char* s, int line_number, bool validate);
 
 /**
  * Reports on stderr that a string is not a valid positive integer
  *
  * @param s            The string
  * @param line_number  The line number
+ * @param validate     Has the validate subcommand been used?
  */
-void report_error_invalid_positive_int(const char* s, int line_number);
+void report_error_invalid_positive_int(const char* s,
+                                       int line_number,
+                                       bool vaidate);
 
 /**
  * Reports on stderr that the first line of a scene is invalid
+ *
+ * @param validate  Has the validate subcommand been used?
  */
-void report_error_scene_first_line(void);
+void report_error_scene_first_line(bool validate);
 
 /**
  * Reports on stderr that a scene line is not recognized
  *
  * @param line_number  The number of the unrecognized line
+ * @param validate     Has the validate subcommand been used?
  */
-void report_error_unrecognized_line(int line_number);
+void report_error_unrecognized_line(int line_number, bool validate);
 
 /**
  * Reports on stderr that a building line has the wrong number of arguments
  *
  * @param object       The object on the line
  * @param line_number  The number of the unrecognized line
+ * @param validate     Has the validate subcommand been used?
  */
 void report_error_line_wrong_arguments_number(const char* object,
-                                              int line_number);
+                                              int line_number,
+                                              bool validate);
 
 /**
  * Reports on stderr that the last line of a scene is invalid
+ *
+ * @param validate     Has the validate subcommand been used?
  */
-void report_error_scene_last_line(void);
+void report_error_scene_last_line(bool validate);
 
 /**
  * Reports on stderr that two buildings are overlapping
  *
- * @param id1  The identifier of the first building
- * @param id2  The identifier of the second building
+ * @param id1       The identifier of the first building
+ * @param id2       The identifier of the second building
+ * @param validate  Has the validate subcommand been used?
  */
-void report_error_overlapping_buildings(const char* id1, const char* id2);
+void report_error_overlapping_buildings(const char* id1,
+                                        const char* id2,
+                                        bool validate);
 
 /**
  * Reports on stderr that two antennas have the same position
  *
- * @param id1  The identifier of the first antenna
- * @param id2  The identifier of the second antenna
+ * @param id1       The identifier of the first antenna
+ * @param id2       The identifier of the second antenna
+ * @param validate  Has the validate subcommand been used?
  */
-void report_error_same_position_antennas(const char* id1, const char* id2);
+void report_error_same_position_antennas(const char* id1,
+                                         const char* id2,
+                                         bool validate);
 
 /**
  * Reports on stderr that the subcommand is mandatory
  */
-void report_error_mandatory_subcommand(void);
+void report_error_mandatory_subcommand();
 
 /**
  * Reports on stderr that the subcommand is unrecognized
