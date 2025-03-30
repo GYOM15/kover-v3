@@ -20,6 +20,7 @@ SUBCOMMAND is mandatory and must take one of the following values:\n\
   describe: describes the loaded scene in details\n\
   help: shows this message\n\
   summarize: summarizes the loaded scene\n\
+  validate: validates the loaded scene\n\
 \n\
 A scene is a text stream that must satisfy the following syntax:\n\
 \n\
