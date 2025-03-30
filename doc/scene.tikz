@@ -4,7 +4,7 @@
   \node at (#2 cm, #3 cm) {#1};
 }
 \newcommand{\house}[5]{%
-  \draw[very thick, draw=blue, fill=purple!20] (#2 cm - #4 cm, #3 cm - #5 cm) rectangle (#2 cm + #4 cm, #3 cm + #5 cm);
+  \draw[very thick, draw=purple, fill=purple!20] (#2 cm - #4 cm, #3 cm - #5 cm) rectangle (#2 cm + #4 cm, #3 cm + #5 cm);
   \node at (#2 cm, #3 cm) {#1};
 }
 \newcommand{\antenna}[4]{%
