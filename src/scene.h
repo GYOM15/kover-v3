@@ -67,9 +67,10 @@ void initialize_empty_scene(struct Scene* scene);
 /**
  * Loads a scene from the standard input
  *
- * @param scene  The resulting scene
+ * @param scene     The resulting scene
+ * @param validate  Has the subcommand validate been invoked?
  */
-void load_scene_from_stdin(struct Scene* scene);
+void load_scene_from_stdin(struct Scene* scene, bool validate);
 
 // Validation
 // ----------
@@ -80,9 +81,10 @@ void load_scene_from_stdin(struct Scene* scene);
  * If the scene is invalid, an error is printed on stdout and the program exits
  * with 1.
  *
- * @param scene  The scene to validate
+ * @param scene     The scene to validate
+ * @param validate  Has the subcommand validate been invoked?
  */
-void validate_scene(const struct Scene* scene);
+void validate_scene(const struct Scene* scene, bool validate);
 
 // Accessors
 // ---------
@@ -131,15 +133,21 @@ void print_scene_bounding_box(const struct Scene* scene);
  *
  * @param scene     The scene to which the building is added
  * @param building  The building to add
+ * @param validate  Has the validate subcommand been invoked?
  */
-void add_building(struct Scene* scene, const struct Building* building);
+void add_building(struct Scene* scene,
+                  const struct Building* building,
+                  bool validate);
 
 /**
  * Adds an antenna to a scene
  *
- * @param scene    The scene to which the antenna is added
- * @param antenna  The antenna to add
+ * @param scene     The scene to which the antenna is added
+ * @param antenna   The antenna to add
+ * @param validate  Has the validate subcommand been invoked?
  */
-void add_antenna(struct Scene* scene, const struct Antenna* antenna);
+void add_antenna(struct Scene* scene,
+                 const struct Antenna* antenna,
+                 bool validate);
 
 #endif
