@@ -6,6 +6,7 @@ test:
 	bats-core/bin/bats test_describe.bats
 	bats-core/bin/bats test_help.bats
 	bats-core/bin/bats test_memory.bats
+	bats-core/bin/bats test_quality.bats
 	bats-core/bin/bats test_summarize.bats
 	bats-core/bin/bats test_validate.bats
 
@@ -15,5 +16,6 @@ count:
 	bats-core/bin/bats -c test_describe.bats
 	bats-core/bin/bats -c test_help.bats
 	bats-core/bin/bats -c test_memory.bats
+	bats-core/bin/bats -c test_quality.bats
 	bats-core/bin/bats -c test_summarize.bats
 	bats-core/bin/bats -c test_validate.bats

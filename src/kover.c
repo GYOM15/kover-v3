@@ -82,6 +82,15 @@ void run_help_subcommand(void) {
 }
 
 /**
+ * Runs the quality subcommand
+ */
+void run_quality_subcommand(void) {
+  struct Scene scene;
+  load_scene_from_stdin(&scene, false);
+  validate_scene(&scene, false);
+}
+
+/**
  * Runs the summarize subcommand
  */
 void run_summarize_subcommand(void) {
@@ -120,6 +129,8 @@ int main(int argc, char* argv[]) {
     run_describe_subcommand();
   else if (strcmp(subcommand, "help") == 0)
     run_help_subcommand();
+  else if (strcmp(subcommand, "quality") == 0)
+    run_quality_subcommand();
   else if (strcmp(subcommand, "summarize") == 0)
     run_summarize_subcommand();
   else if (strcmp(subcommand, "validate") == 0)
