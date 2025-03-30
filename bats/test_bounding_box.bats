@@ -39,10 +39,34 @@ setup() {
   assert_output "bounding box [-3, 7] x [-2, 8]"
 }
 
+@test "kover bounding-box runs correctly on a scene with 1 house" {
+  run kover bounding-box < "$examples_dir"/1h.scene
+  assert_success
+  assert_output "bounding box [-1, 1] x [-1, 1]"
+}
+
+@test "kover bounding-box runs correctly on a scene with 2 houses" {
+  run kover bounding-box < "$examples_dir"/2h.scene
+  assert_success
+  assert_output "bounding box [-1, 7] x [-1, 11]"
+}
+
 @test "kover bounding-box runs correctly on a scene with 1 building and 1 antenna" {
   run kover bounding-box < "$examples_dir"/1b1a.scene
   assert_success
   assert_output "bounding box [-3, 7] x [-2, 8]"
+}
+
+@test "kover bounding-box runs correctly on a scene with 1 building and 1 house" {
+  run kover bounding-box < "$examples_dir"/1b1h.scene
+  assert_success
+  assert_output "bounding box [-1, 5] x [-1, 6]"
+}
+
+@test "kover bounding-box runs correctly on a scene with 1 building, 1 house and 1 antenna" {
+  run kover bounding-box < "$examples_dir"/1b1h1a.scene
+  assert_success
+  assert_output "bounding box [-1, 5] x [-1, 6]"
 }
 
 # Wrong usage
