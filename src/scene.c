@@ -337,8 +337,8 @@ const char* construction_type(const struct Construction* construction) {
 }
 
 void print_scene_quality(const struct Scene* scene) {
-  if (scene_is_empty(scene)) {
-    puts("Nothing to report, scene is empty");
+  if (scene->num_constructions == 0) {
+    puts("Nothing to report, scene contains no construction");
     return;
   }
   for (unsigned int c = 0; c < scene->num_constructions; ++c)
