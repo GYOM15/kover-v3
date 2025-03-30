@@ -71,7 +71,7 @@ setup() {
   run kover validate < "$examples_dir"/2b_overlapping.invalid
   [ "$status" -eq 1 ]
   assert_line "not ok"
-  assert_line "error: buildings b1 and b2 are overlapping"
+  assert_line "error: building b1 and building b2 are overlapping"
 }
 
 @test "kover validate reports an error when a building line has a wrong number of arguments" {
@@ -111,6 +111,65 @@ setup() {
 
 @test "kover validate reports an error when a building line has an invalid h" {
   run kover validate < "$examples_dir"/1b_wrong_h.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line 'error: invalid positive integer "-2" (line #2)'
+}
+
+# Wrong houses
+# ------------
+
+@test "kover validate reports an error when two houses have same id" {
+  run kover validate < "$examples_dir"/2h_non_unique_id.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line "error: house identifier h1 is non unique"
+}
+
+@test "kover validate reports an error when two houses are overlapping" {
+  run kover validate < "$examples_dir"/2h_overlapping.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line "error: house h1 and house h2 are overlapping"
+}
+
+@test "kover validate reports an error when a house line has a wrong number of arguments" {
+  run kover validate < "$examples_dir"/1h_wrong_number_of_arguments.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line "error: house line has wrong number of arguments (line #2)"
+}
+
+@test "kover validate reports an error when a house line has an invalid identifier" {
+  run kover validate < "$examples_dir"/1h_wrong_id.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line 'error: invalid identifier "h^" (line #2)'
+}
+
+@test "kover validate reports an error when a house line has an invalid x" {
+  run kover validate < "$examples_dir"/1h_wrong_x.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line 'error: invalid integer "a" (line #2)'
+}
+
+@test "kover validate reports an error when a house line has an invalid y" {
+  run kover validate < "$examples_dir"/1h_wrong_y.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line 'error: invalid integer "02" (line #2)'
+}
+
+@test "kover validate reports an error when a house line has an invalid w" {
+  run kover validate < "$examples_dir"/1h_wrong_w.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line 'error: invalid positive integer "c" (line #2)'
+}
+
+@test "kover validate reports an error when a house line has an invalid h" {
+  run kover validate < "$examples_dir"/1h_wrong_h.invalid
   [ "$status" -eq 1 ]
   assert_line "not ok"
   assert_line 'error: invalid positive integer "-2" (line #2)'
@@ -160,3 +219,14 @@ setup() {
   assert_line "not ok"
   assert_line 'error: invalid positive integer "-1" (line #2)'
 }
+
+# Overlapping building and house
+# ------------------------------
+
+@test "kover validate reports an error when a building and a house are overlapping" {
+  run kover validate < "$examples_dir"/1b1h_overlapping.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line "error: building b and house h are overlapping"
+}
+

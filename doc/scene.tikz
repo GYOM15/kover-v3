@@ -3,6 +3,10 @@
   \draw[very thick, draw=blue, fill=blue!20] (#2 cm - #4 cm, #3 cm - #5 cm) rectangle (#2 cm + #4 cm, #3 cm + #5 cm);
   \node at (#2 cm, #3 cm) {#1};
 }
+\newcommand{\house}[5]{%
+  \draw[very thick, draw=blue, fill=purple!20] (#2 cm - #4 cm, #3 cm - #5 cm) rectangle (#2 cm + #4 cm, #3 cm + #5 cm);
+  \node at (#2 cm, #3 cm) {#1};
+}
 \newcommand{\antenna}[4]{%
   \fill[fill=darkgreen!20, opacity=0.3] (#2 cm, #3 cm) circle (#4 cm);
   \draw[very thick, draw=darkgreen] (#2 cm, #3 cm) circle (#4 cm);
@@ -25,7 +29,7 @@
   \boundinggrid{-2}{-3}{21}{12}
   \building{$b_1$}{0}{0}{1}{1}
   \building{$b_2$}{7}{8}{2}{3}
-  \building{$b_3$}{15}{1}{4}{1}
+  \house{$h$}{15}{1}{4}{1}
   \antenna{$a1$}{5}{4}{6}
   \antenna{$a2$}{16}{3}{4}
 \end{tikzpicture}

@@ -20,6 +20,8 @@
 struct Building {
   // The identifier of the building
   char id[MAX_LENGTH_ID + 1];
+  // Is the building a house?
+  bool is_house;
   // The x coordinate of the building
   int x;
   // The y coordinate of the building
@@ -96,6 +98,30 @@ void validate_scene(const struct Scene* scene, bool validate);
  * @return       true if and only if the given scene is empty
  */
 bool scene_is_empty(const struct Scene* scene);
+
+/**
+ * Returns the number of buildings in a scene
+ *
+ * @param scene  The scene
+ * @return       The number of buildings
+ */
+int scene_num_buildings(const struct Scene* scene);
+
+/**
+ * Returns the number of houses in a scene
+ *
+ * @param scene  The scene
+ * @return       The number of houses
+ */
+int scene_num_houses(const struct Scene* scene);
+
+/**
+ * Returns the type of building
+ *
+ * @param building  The building
+ * @return          The type
+ */
+const char* building_type(const struct Building* building);
 
 /**
  * Prints a summary of the scene on stdout

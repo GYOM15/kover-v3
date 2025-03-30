@@ -121,15 +121,19 @@ void report_error_line_wrong_arguments_number(const char* object,
 void report_error_scene_last_line(bool validate);
 
 /**
- * Reports on stderr that two buildings are overlapping
+ * Reports on stderr that two objects are overlapping
  *
- * @param id1       The identifier of the first building
- * @param id2       The identifier of the second building
+ * @param object1   The type of the first object
+ * @param id1       The identifier of the first object
+ * @param object2   The type of the second object
+ * @param id2       The identifier of the second object
  * @param validate  Has the validate subcommand been used?
  */
-void report_error_overlapping_buildings(const char* id1,
-                                        const char* id2,
-                                        bool validate);
+void report_error_overlapping_objects(const char* object1,
+                                      const char* id1,
+                                      const char* object2,
+                                      const char* id2,
+                                      bool validate);
 
 /**
  * Reports on stderr that two antennas have the same position

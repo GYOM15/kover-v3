@@ -119,12 +119,15 @@ void report_error_scene_last_line(bool validate) {
   exit(1);
 }
 
-void report_error_overlapping_buildings(const char* id1,
-                                        const char* id2,
-                                        bool validate) {
+void report_error_overlapping_objects(const char* object1,
+                                      const char* id1,
+                                      const char* object2,
+                                      const char* id2,
+                                      bool validate) {
   if (validate)
     printf("not ok\n");
-  fprintf(stderr, "error: buildings %s and %s are overlapping\n", id1, id2);
+  fprintf(stderr, "error: %s %s and %s %s are overlapping\n",
+          object1, id1, object2, id2);
   exit(1);
 }
 

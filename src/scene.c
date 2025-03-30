@@ -93,8 +93,10 @@ void validate_buildings(const struct Scene* scene, bool validate) {
       const struct Building* building1 = scene->buildings + b1,
                            * building2 = scene->buildings + b2;
       if (are_building_overlapping(building1, building2))
-        report_error_overlapping_buildings(building1->id, building2->id,
-                                           validate);
+        report_error_overlapping_objects(
+          building_type(building1), building1->id,
+          building_type(building2), building2->id,
+          validate);
     }
 }
 
@@ -172,10 +174,11 @@ void parse_line(const char* line,
 bool load_building_from_parsed_line(const struct ParsedLine* parsed_line,
                                     struct Scene* scene,
                                     bool validate) {
-  if (strcmp(parsed_line->tokens[0], "building") != 0)
+  if (strcmp(parsed_line->tokens[0], "building") != 0 &&
+      strcmp(parsed_line->tokens[0], "house") != 0)
     return false;
   if (parsed_line->num_tokens != 6)
-    report_error_line_wrong_arguments_number("building",
+    report_error_line_wrong_arguments_number(parsed_line->tokens[0],
                                              parsed_line->line_number,
                                              validate);
   if (!is_valid_id(parsed_line->tokens[1]))
@@ -200,6 +203,7 @@ bool load_building_from_parsed_line(const struct ParsedLine* parsed_line,
                                         validate);
   struct Building building;
   strncpy(building.id, parsed_line->tokens[1], MAX_LENGTH_ID);
+  building.is_house = strcmp(parsed_line->tokens[0], "house") == 0;
   building.x = atoi(parsed_line->tokens[2]);
   building.y = atoi(parsed_line->tokens[3]);
   building.w = atoi(parsed_line->tokens[4]);
@@ -308,27 +312,54 @@ bool scene_is_empty(const struct Scene* scene) {
   return scene->num_buildings == 0 && scene->num_antennas == 0;
 }
 
+int scene_num_buildings(const struct Scene* scene) {
+  int num_buildings = 0;
+  for (unsigned int b = 0; b < scene->num_buildings; ++b)
+    num_buildings += scene->buildings[b].is_house ? 0 : 1;
+  return num_buildings;
+}
+
+int scene_num_houses(const struct Scene* scene) {
+  int num_houses = 0;
+  for (unsigned int b = 0; b < scene->num_buildings; ++b)
+    num_houses += scene->buildings[b].is_house ? 1 : 0;
+  return num_houses;
+}
+
+const char* building_type(const struct Building* building) {
+  return building->is_house ? "house" : "building";
+}
+
 void print_scene_summary(const struct Scene* scene) {
-  if (scene->num_buildings == 0 && scene->num_antennas == 0) {
+  int num_buildings = scene_num_buildings(scene),
+      num_houses = scene_num_houses(scene),
+      num_antennas = scene->num_antennas;
+  if (scene_is_empty(scene)) {
     puts("An empty scene");
     return;
   }
   printf("A scene with ");
-  if (scene->num_buildings > 0)
-    printf("%d building%s", scene->num_buildings,
-           scene->num_buildings > 1 ? "s" : "");
-  if (scene->num_buildings > 0 && scene->num_antennas > 0)
-    printf(" and ");
-  if (scene->num_antennas > 0)
-    printf("%d antenna%s", scene->num_antennas,
-           scene->num_antennas > 1 ? "s" : "");
+  if (num_buildings > 0) {
+    printf("%d building%s", num_buildings, num_buildings > 1 ? "s" : "");
+    if (num_houses > 0 && num_antennas > 0)
+      printf(", ");
+    else if (num_houses > 0 || num_antennas > 0)
+      printf(" and ");
+  }
+  if (num_houses > 0) {
+    printf("%d house%s", num_houses, num_houses > 1 ? "s" : "");
+    if (num_antennas > 0)
+      printf(" and ");
+  }
+  if (num_antennas > 0)
+    printf("%d antenna%s", num_antennas, num_antennas > 1 ? "s" : "");
   printf("\n");
 }
 
 void print_scene_buildings(const struct Scene* scene) {
   for (unsigned int b = 0; b < scene->num_buildings; ++b) {
     const struct Building* building = scene->buildings + b;
-    printf("  building %s at %d %d with dimensions %d %d\n",
+    printf("  %s %s at %d %d with dimensions %d %d\n", building_type(building),
            building->id, building->x, building->y, building->w, building->h);
   }
 }
@@ -382,11 +413,13 @@ void add_building(struct Scene* scene,
     ++b;
   if (b < scene->num_buildings &&
       strcmp(building->id, scene->buildings[b].id) == 0)
-    report_error_non_unique_identifiers("building", building->id, validate);
+    report_error_non_unique_identifiers(building_type(building),
+                                        building->id, validate);
   for (unsigned int b2 = scene->num_buildings; b2 > b; --b2)
     scene->buildings[b2] = scene->buildings[b2 - 1];
   struct Building* scene_building = scene->buildings + b;
   strncpy(scene_building->id, building->id, MAX_LENGTH_ID);
+  scene_building->is_house = building->is_house;
   scene_building->x = building->x;
   scene_building->y = building->y;
   scene_building->w = building->w;

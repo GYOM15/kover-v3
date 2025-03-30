@@ -39,10 +39,40 @@ setup() {
   assert_output "A scene with 2 antennas"
 }
 
+@test "kover summarize runs correctly on a scene with 1 house" {
+  run kover summarize < "$examples_dir"/1h.scene
+  assert_success
+  assert_output "A scene with 1 house"
+}
+
+@test "kover summarize runs correctly on a scene with 2 houses" {
+  run kover summarize < "$examples_dir"/2h.scene
+  assert_success
+  assert_output "A scene with 2 houses"
+}
+
 @test "kover summarize runs correctly on a scene with 1 building and 1 antenna" {
   run kover summarize < "$examples_dir"/1b1a.scene
   assert_success
   assert_output "A scene with 1 building and 1 antenna"
+}
+
+@test "kover summarize runs correctly on a scene with 1 building and 1 house" {
+  run kover summarize < "$examples_dir"/1b1h.scene
+  assert_success
+  assert_output "A scene with 1 building and 1 house"
+}
+
+@test "kover summarize runs correctly on a scene with 1 house and 1 antenna" {
+  run kover summarize < "$examples_dir"/1h1a.scene
+  assert_success
+  assert_output "A scene with 1 house and 1 antenna"
+}
+
+@test "kover summarize runs correctly on a scene with 1 building, 1 house and 1 antenna" {
+  run kover summarize < "$examples_dir"/1b1h1a.scene
+  assert_success
+  assert_output "A scene with 1 building, 1 house and 1 antenna"
 }
 
 # Wrong usage
