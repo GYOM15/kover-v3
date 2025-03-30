@@ -9,8 +9,8 @@ d'antennes de communication pour une zone donnée.
 L'application `kover` est une application en ligne de commande qui facilite le
 positionnement d'*antennes* de communication dans une *scène* afin de desservir
 des clients de façon adéquate. Les emplacements des clients sont représentés
-par des *buildings* ou des maisons (*houses*), qui correspondent simplement
-à des boîtes rectangulaires.
+par des constructions de type *building* ou *maison* (en anglais, *house*), qui
+correspondent simplement à des boîtes rectangulaires.
 
 Le flux de texte suivant décrit une scène valide composée de deux buildings
 (identifiés par `b1` et `b2`), d'une maison (identifiée par `h`) et de deux
@@ -31,18 +31,17 @@ SVG suivant:
 
 ![Une scène de 2 buildings, 1 maison et 2 antennes](doc/scene.svg)
 
-Plus formellement, un *building* ou une maison (*house*) se caractérise par les
-éléments suivants:
+Plus formellement, une construction se caractérise par les éléments suivants:
 
 * `id`: un *identifiant* unique, sous forme de chaîne de caractères;
+* `type`: un *type* de construction (*building* ou *house*);
 * `x` et `y`: une *position* $`(x,y)`$ dans le plan, sous forme de deux entiers
   (négatifs, nuls ou positifs);
 * `w` et `h`: une *demi-largeur* et une *demi-hauteur* $`(w, h)`$, qui sont
   des entiers strictement positifs.
 
-Ainsi, les 4 points du rectangle déterminé par un *building* ou une maison sont
-$`(x - w, y - h)`$, $`(x + w, y - h)`$, $`(x - w, y + h)`$ et $`(x + w,
-y + h)`$.
+Ainsi, les 4 points du rectangle déterminé par une construction sont $`(x - w,
+y - h)`$, $`(x + w, y - h)`$, $`(x - w, y + h)`$ et $`(x + w, y + h)`$.
 
 Une *antenne* est représentée par les éléments suivants:
 
@@ -52,16 +51,15 @@ Une *antenne* est représentée par les éléments suivants:
 * `r`: un rayon (ou une *portée*) $`r`$, qui est un entier strictement
   positif.
 
-Ainsi, un *building* et une maison ne peuvent pas avoir une aire nulle, alors
-qu'une antenne a toujours une portée décrivant un disque d'aire strictement
-positive. Finalement, une *scène* est représentée par les éléments suivants:
+Ainsi, une construction ne peut pas avoir une aire nulle, alors qu'une antenne
+a toujours une portée décrivant un disque d'aire strictement positive.
+Finalement, une *scène* est représentée par les éléments suivants:
 
-* `buildings`: une collection de *buildings*
-* `houses`: une collection de maisons
+* `constructions`: une collection de constructions
 * `antennas`: une collection d'antennes
 
-De plus, les *buildings* et les maisons d'une scène valide ne se chevauchent
-pas, c'est-à-dire qu'une scène ne peut contenir deux buildings/maisons dont
+De plus, les constructions d'une scène valide ne se chevauchent pas,
+c'est-à-dire qu'une scène ne peut contenir deux constructions dont
 l'intersection occupe une aire non nulle. De plus, les antennes occupent des
 positions distinctes.
 
@@ -72,7 +70,7 @@ syntaxe spécifique:
    étendue (ERE) `^begin scene$`;
 2. La dernière ligne du texte doit correspondre à l'ERE `^end scene$`;
 3. Chaque ligne entre la première ligne et la dernière ligne doit être une
-   ligne de type *building* ou une ligne de type *antenne*;
+   ligne de type *building*, de type *house* ou de type *antenne*;
 4. Une ligne de type *building* doit correspondre à l'ERE
    `^[:blank:]*building ID X Y W H[:blank:]*$`,
    où
@@ -113,7 +111,7 @@ Des exemples de scènes valides et invalides sont donnés dans le répertoire
 
 L'application `kover` permet donc de manipuler des scènes et vise à optimiser
 le positionnement d'antennes dans ces scènes afin de couvrir adéquatement les
-buildings et les maisons qui occupent cette scène.
+constructions qui occupent cette scène.
 
 ## Installation
 
