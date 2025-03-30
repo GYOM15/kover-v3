@@ -341,8 +341,10 @@ void print_scene_quality(const struct Scene* scene) {
     puts("Nothing to report, scene contains no construction");
     return;
   }
-  for (unsigned int c = 0; c < scene->num_constructions; ++c)
-    printf("building %s: E\n", scene->constructions[c].id);
+  for (unsigned int c = 0; c < scene->num_constructions; ++c) {
+    const struct Construction* construction = scene->constructions + c;
+    printf("%s %s: E\n", construction_type(construction), construction->id);
+  }
 }
 
 void print_scene_summary(const struct Scene* scene) {

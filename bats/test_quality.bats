@@ -40,6 +40,19 @@ setup() {
   assert_output "Nothing to report, scene contains no construction"
 }
 
+@test "kover quality runs correctly on a scene with 1 house" {
+  run kover quality < "$examples_dir"/1h.scene
+  assert_success
+  assert_output "house h1: E"
+}
+
+@test "kover quality runs correctly on a scene with 2 houses" {
+  run kover quality < "$examples_dir"/2h.scene
+  assert_success
+  assert_line --index 0 "house h1: E"
+  assert_line --index 1 "house h2: E"
+}
+
 # Wrong usage
 # -----------
 
