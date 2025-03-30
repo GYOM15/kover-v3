@@ -31,8 +31,8 @@ SVG suivant:
 
 ![Une scène de 2 buildings, 1 maison et 2 antennes](doc/scene.svg)
 
-Plus formellement, un *building* et une maison (*house*) sont représentées par
-les éléments suivants:
+Plus formellement, un *building* ou une maison (*house*) se caractérise par les
+éléments suivants:
 
 * `id`: un *identifiant* unique, sous forme de chaîne de caractères;
 * `x` et `y`: une *position* $`(x,y)`$ dans le plan, sous forme de deux entiers
@@ -56,10 +56,14 @@ Ainsi, un *building* et une maison ne peuvent pas avoir une aire nulle, alors
 qu'une antenne a toujours une portée décrivant un disque d'aire strictement
 positive. Finalement, une *scène* est représentée par les éléments suivants:
 
-* `buildings`: une collection de *buildings* et de maisons qui ne se
-  chevauchent pas, c'est-à-dire qu'une scène ne peut contenir deux
-  buildings/maisons dont l'intersection occupe une aire non nulle.
-* `antennas`: une collection d'antennes qui occupent des positions distinctes.
+* `buildings`: une collection de *buildings*
+* `houses`: une collection de maisons
+* `antennas`: une collection d'antennes
+
+De plus, les *buildings* et les maisons d'une scène valide ne se chevauchent
+pas, c'est-à-dire qu'une scène ne peut contenir deux buildings/maisons dont
+l'intersection occupe une aire non nulle. De plus, les antennes occupent des
+positions distinctes.
 
 Pour décrire une scène à l'aide d'un flux de texte, on convient d'utiliser une
 syntaxe spécifique:
