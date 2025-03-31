@@ -185,6 +185,8 @@ tâche!
 L'image produite doit contenir les éléments suivants:
 
 * Un cadre rectangulaire qui englobe tous les éléments de la scène
+* Une grille pointillée qui facilite l'identification des coordonnées des
+  points de la scène
 * Des graduations (des nombres) sur chacun des 4 côtés du cadre qui facilitent
   l'identification des coordonnées des points de la scène
 * Pour chaque construction, un rectangle de couleur bleue (pour les
