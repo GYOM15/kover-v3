@@ -59,6 +59,36 @@ setup() {
   assert_output "building b: E"
 }
 
+@test "kover quality runs correctly on a scene with 1 building and 1 antenna (1 corner)" {
+  run kover quality < "$examples_dir"/1b1a_1corner.scene
+  assert_success
+  assert_output "building b: D"
+}
+
+@test "kover quality runs correctly on a scene with 1 building and 1 antenna (2 corners)" {
+  run kover quality < "$examples_dir"/1b1a_2corners.scene
+  assert_success
+  assert_output "building b: C"
+}
+
+@test "kover quality runs correctly on a scene with 1 building and 1 antenna (3 corners)" {
+  run kover quality < "$examples_dir"/1b1a_3corners.scene
+  assert_success
+  assert_output "building b: B"
+}
+
+@test "kover quality runs correctly on a scene with 1 building and 1 antenna (4 corners)" {
+  run kover quality < "$examples_dir"/1b1a_4corners.scene
+  assert_success
+  assert_output "building b: A"
+}
+
+@test "kover quality runs correctly on a scene with 1 building and 4 antennas (4 corners)" {
+  run kover quality < "$examples_dir"/1b4a_4corners.scene
+  assert_success
+  assert_output "building b: A"
+}
+
 # Wrong usage
 # -----------
 
