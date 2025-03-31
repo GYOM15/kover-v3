@@ -84,7 +84,7 @@ Vous êtes maintenant prêt ou prête à commencer les tâches demandées!
 La première tâche consiste à réorganiser (réusiner ou refactoriser) le module
 `scene`, qui commence à être volumineux. Il s'agit essentiellement de créer
 deux nouveaux modules, `antenna` et `construction`, qui regroupent les
-déclarations de types et les fonctions spécifique aux antennes et aux
+déclarations de types et les fonctions spécifiques aux antennes et aux
 constructions (*building* ou *house*).
 
 En particulier, le comportement de votre programme devrait rester exactement le
@@ -107,8 +107,7 @@ suivantes, en plaçant tous vos *commits* sur la branche `refactor-scene`:
 6. Mettre à jour les *docstrings* s'il y a lieu.
 7. Vous assurer de respecter le style de programmation existant
 8. Répartir vos modifications le plus possible en différents *commits*
-   atomiques, en formatant vos messages selon le style demandé dans le cadre du
-   travail pratique 1
+   atomiques, en formatant vos messages selon le style demandé
 
 ## Tâche 2: `dynamic-allocation`
 
@@ -133,8 +132,7 @@ suivantes, en plaçant tous vos *commits* sur la branche `dynamic-allocation`:
    apportés
 6. Vous assurer de respecter le style de programmation existant
 7. Répartir vos modifications le plus possible en différents *commits*
-   atomiques, en formatant vos messages selon le style demandé dans le cadre du
-   travail pratique 1
+   atomiques, en formatant vos messages selon le style demandé
 
 ## Tâche 3: `fix-overlap`
 
@@ -163,8 +161,7 @@ minimalement apporter les modifications suivantes, en plaçant tous vos
 4. Au besoin, mettre à jour toute documentation pertinente
 5. Vous assurer de respecter le style de programmation existant
 6. Répartir vos modifications le plus possible en différents *commits*
-   atomiques, en formatant vos messages selon le style demandé dans le cadre du
-   travail pratique 1
+   atomiques, en formatant vos messages selon le style demandé
 
 ## Tâche 4: `draw-scene`
 
@@ -179,6 +176,12 @@ représentation de la scène similaire à celle disponible dans le fichier
 $ bin/kover draw scene.svg < examples/2b1h2a.scene
 ```
 
+**Note importante**: L'image disponible dans `doc/scene.svg` a été produite
+avec TikZ, qui est une bibliothèque LaTeX. Dans ce TP, on vous demande de
+produire une telle image avec la bibliothèque Cairo. Vous n'aurez aucun point
+si vous utilise TikZ et LaTeX, ce n'est pas ce qui est demandé dans cette
+tâche!
+
 L'image produite doit contenir les éléments suivants:
 
 * Un cadre rectangulaire qui englobe tous les éléments de la scène
@@ -186,15 +189,16 @@ L'image produite doit contenir les éléments suivants:
   l'identification des coordonnées des points de la scène
 * Pour chaque construction, un rectangle de couleur bleue (pour les
   *buildings*) ou mauve (pour les maisons) avec les bonnes dimensions, ainsi
-  qu'une étiquette portant l'identifiant de la construction placé au centre
+  qu'une étiquette portant l'identifiant de la construction placée au centre
 * Pour chaque antenne, un disque de couleur verte avec la bonne dimension,
-  ainsi qu'une étiquette au centre qui identifie l'antenne (vous pouvez
-  optionnellement dessiner un point au centre, mais ce n'est pas obligatoire)
+  ainsi qu'une étiquette portant l'identifiant de l'antenne placée au centre
+  (vous pouvez optionnellement dessiner un point au centre, mais ce n'est pas
+  obligatoire)
 
 Plus spécifiquement, vous devez minimalement apporter les modifications
 suivantes, en plaçant tous vos *commits* sur la branche `draw-scene`:
 
-1. Introduire la sous-commande `draw` à l'application `kover`
+1. Introduire la sous-commande `draw`
 2. Implémenter la sous-commande `draw` pour qu'elle produise un fichier au
    format SVG représentant une scène quelconque, ayant le contenu décrit
    ci-haut
@@ -208,13 +212,12 @@ suivantes, en plaçant tous vos *commits* sur la branche `draw-scene`:
 6. Au besoin, mettre à jour toute documentation pertinente
 7. Vous assurer de respecter le style de programmation existant
 8. Répartir vos modifications le plus possible en différents *commits*
-   atomiques, en formatant vos messages selon le style demandé dans le cadre du
-   travail pratique 1
+   atomiques, en formatant vos messages selon le style demandé
 
 ## Clone et création du dépôt
 
-Comme pour le travail pratique 1, vous devez cloner le dépôt fourni et
-l'héberger sur la plateforme [Gitlab du
+Comme pour les travaux pratiques précédents, vous devez cloner le dépôt fourni
+et l'héberger sur la plateforme [Gitlab du
 département](https://gitlab.info.uqam.ca/). Votre dépôt devra se nommer
 **exactement** `inf3135-251-tp3` et l'URL devra être **exactement**
 `https://gitlab.info.uqam.ca/<utilisateur>/inf3135-251-tp3`, où `<utilisateur>`
