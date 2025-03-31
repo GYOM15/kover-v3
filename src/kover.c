@@ -19,6 +19,7 @@ SUBCOMMAND is mandatory and must take one of the following values:\n\
   bounding-box: returns a bounding box of the loaded scene\n\
   describe: describes the loaded scene in details\n\
   help: shows this message\n\
+  quality: reports the cover quality of each construction\n\
   summarize: summarizes the loaded scene\n\
   validate: validates the loaded scene\n\
 \n\
