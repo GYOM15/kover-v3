@@ -256,6 +256,81 @@ bool load_antenna_from_parsed_line(const struct ParsedLine* parsed_line,
   return true;
 }
 
+// Computations
+// ------------
+
+/**
+ * Returns the squared distance between two points
+ *
+ * @param x1  The x-coordinate of the first point
+ * @param y1  The y-coordinate of the first point
+ * @param x2  The x-coordinate of the second point
+ * @param y2  The y-coordinate of the second point
+ * @return    The squared distance
+ */
+int squared_distance(int x1, int y1, int x2, int y2) {
+  int dx = x1 - x2;
+  int dy = y1 - y2;
+  return dx * dx + dy * dy;
+}
+
+/**
+ * Returns the number of corners of a construction that are covered by at least
+ * one antenna
+ *
+ * @param scene         The scene
+ * @param construction  The construction
+ * @return              The number of corners
+ */
+int num_corners_covered(const struct Scene* scene,
+                        const struct Construction* construction) {
+  bool covered1 = false,
+       covered2 = false,
+       covered3 = false,
+       covered4 = false;
+  for (unsigned int a = 0; a < scene->num_antennas; ++a) {
+    const struct Antenna* antenna = scene->antennas + a;
+    int sd1 = squared_distance(antenna->x, antenna->y,
+                               construction->x + construction->w,
+                               construction->y + construction->h),
+        sd2 = squared_distance(antenna->x, antenna->y,
+                               construction->x + construction->w,
+                               construction->y - construction->h),
+        sd3 = squared_distance(antenna->x, antenna->y,
+                               construction->x - construction->w,
+                               construction->y + construction->h),
+        sd4 = squared_distance(antenna->x, antenna->y,
+                               construction->x - construction->w,
+                               construction->y - construction->h);
+    int r2 = antenna->r * antenna->r;
+    covered1 = covered1 || sd1 <= r2;
+    covered2 = covered2 || sd2 <= r2;
+    covered3 = covered3 || sd3 <= r2;
+    covered4 = covered4 || sd4 <= r2;
+  }
+  return covered1 + covered2 + covered3 + covered4;
+}
+
+/**
+ * Returns the quality of a construction in a given scene
+ *
+ * @param scene         The scene
+ * @param construction  The construction
+ * @return              The quality
+ */
+char quality(const struct Scene* scene,
+             const struct Construction* construction) {
+  int num_corners = num_corners_covered(scene, construction);
+  switch (num_corners) {
+    case 0: return 'E';
+    case 1: return 'D';
+    case 2: return 'C';
+    case 3: return 'B';
+    case 4: return 'A';
+  }
+  return '?';
+}
+
 // Public functions definition
 // ===========================
 
@@ -334,6 +409,18 @@ const char* construction_type(const struct Construction* construction) {
     case HOUSE:    return "house";
   }
   return "??";
+}
+
+void print_scene_quality(const struct Scene* scene) {
+  if (scene->num_constructions == 0) {
+    puts("Nothing to report, scene contains no construction");
+    return;
+  }
+  for (unsigned int c = 0; c < scene->num_constructions; ++c) {
+    const struct Construction* construction = scene->constructions + c;
+    printf("%s %s: %c\n", construction_type(construction), construction->id,
+           quality(scene, construction));
+  }
 }
 
 void print_scene_summary(const struct Scene* scene) {

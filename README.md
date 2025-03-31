@@ -195,6 +195,25 @@ Pour afficher l'aide, il suffit d'entrer la commande suivante:
 $ kover help
 ```
 
+### `kover quality`
+
+La sous-commande `quality` rapport sur la sortie standard la qualité de
+couverture des constructions d'une scène donnée. Cette qualité est représentée
+comme suit:
+
+- `A`: chacun des quatre coins de la construction est couvert
+- `B`: exactement trois coins sur quatre de la construction sont couverts
+- `C`: exactement deux coins sur quatre de la construction sont couverts
+- `D`: exactement un coin sur quatre de la construction est couvert
+- `E`: aucun des quatre coins de la construction n'est couvert
+
+Par exemple
+
+```sh
+$ kover quality < examples/1b1a_3corners.scene
+building b: B
+```
+
 ### `kover summarize`
 
 On peut en tout temps avoir un résumé de la scène lue sur l'entrée standard

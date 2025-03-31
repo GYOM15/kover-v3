@@ -132,6 +132,13 @@ int scene_num_houses(const struct Scene* scene);
 const char* construction_type(const struct Construction* construction);
 
 /**
+ * Prints the quality of the scene to stdout
+ *
+ * @param scene  The scene whose quality is printed
+ */
+void print_scene_quality(const struct Scene* scene);
+
+/**
  * Prints a summary of the scene on stdout
  *
  * @param scene  The scene to print

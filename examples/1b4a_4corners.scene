@@ -1,0 +1,7 @@
+begin scene
+  building b 2 2 2 2
+  antenna a1 0 0 1
+  antenna a2 0 4 1
+  antenna a3 4 0 1
+  antenna a4 4 4 1
+end scene
