@@ -308,12 +308,28 @@ int num_corners_covered(const struct Scene* scene,
     covered3 = covered3 || sd3 <= r2;
     covered4 = covered4 || sd4 <= r2;
   }
-  return (covered1 ? 1 : 0) +
-         (covered2 ? 1 : 0) +
-         (covered3 ? 1 : 0) +
-         (covered4 ? 1 : 0);
+  return covered1 + covered2 + covered3 + covered4;
 }
 
+/**
+ * Returns the quality of a construction in a given scene
+ *
+ * @param scene         The scene
+ * @param construction  The construction
+ * @return              The quality
+ */
+char quality(const struct Scene* scene,
+             const struct Construction* construction) {
+  int num_corners = num_corners_covered(scene, construction);
+  switch (num_corners) {
+    case 0: return 'E';
+    case 1: return 'D';
+    case 2: return 'C';
+    case 3: return 'B';
+    case 4: return 'A';
+  }
+  return '?';
+}
 
 // Public functions definition
 // ===========================
@@ -402,16 +418,8 @@ void print_scene_quality(const struct Scene* scene) {
   }
   for (unsigned int c = 0; c < scene->num_constructions; ++c) {
     const struct Construction* construction = scene->constructions + c;
-    int num_corners = num_corners_covered(scene, construction);
-    char quality = '?';
-    switch (num_corners) {
-      case 0: quality = 'E'; break;
-      case 1: quality = 'D'; break;
-      case 2: quality = 'C'; break;
-      case 3: quality = 'B'; break;
-      case 4: quality = 'A'; break;
-    }
-    printf("%s %s: %c\n", construction_type(construction), construction->id, quality);
+    printf("%s %s: %c\n", construction_type(construction), construction->id,
+           quality(scene, construction));
   }
 }
 
