@@ -21,6 +21,10 @@
 #define MAX_NUM_TOKENS 6
 // The maximum length of a token in a line
 #define MAX_TOKEN_LENGTH 10
+// Initial capacity for constructions and antennas
+#define INITIAL_CAPACITY 4
+// Growth factor for dynamic arrays
+#define GROWTH_FACTOR 2
 
 // Types
 // -----
@@ -35,6 +39,43 @@ struct ParsedLine {
   int line_number;
 };
 
+// Dynamic array operations
+// -----------------------
+
+/**
+ * Ensures that the constructions array has enough capacity
+ *
+ * @param scene  The scene to resize
+ */
+void ensure_construction_capacity(struct Scene* scene) {
+  if (scene->num_constructions >= scene->capacity_constructions) {
+    scene->capacity_constructions *= GROWTH_FACTOR;
+    scene->constructions = realloc(scene->constructions, 
+                                  scene->capacity_constructions * sizeof(struct Construction));
+    if (!scene->constructions) {
+      fprintf(stderr, "error: memory allocation failed\n");
+      exit(1);
+    }
+  }
+}
+
+/**
+ * Ensures that the antennas array has enough capacity
+ *
+ * @param scene  The scene to resize
+ */
+void ensure_antenna_capacity(struct Scene* scene) {
+  if (scene->num_antennas >= scene->capacity_antennas) {
+    scene->capacity_antennas *= GROWTH_FACTOR;
+    scene->antennas = realloc(scene->antennas, 
+                             scene->capacity_antennas * sizeof(struct Antenna));
+    if (!scene->antennas) {
+      fprintf(stderr, "error: memory allocation failed\n");
+      exit(1);
+    }
+  }
+}
+
 // Validation
 // ----------
 
@@ -48,8 +89,8 @@ void validate_constructions(const struct Scene* scene, bool validate) {
   for (unsigned int c1 = 0; c1 < scene->num_constructions; ++c1)
     for (unsigned int c2 = c1 + 1; c2 < scene->num_constructions; ++c2) {
       const struct Construction
-        *construction1 = scene->constructions + c1,
-        *construction2 = scene->constructions + c2;
+        *construction1 = &scene->constructions[c1],
+        *construction2 = &scene->constructions[c2];
       if (are_constructions_overlapping(construction1, construction2))
         report_error_overlapping_objects(
           construction_type(construction1), construction1->id,
@@ -67,8 +108,8 @@ void validate_constructions(const struct Scene* scene, bool validate) {
 void validate_antennas(const struct Scene* scene, bool validate) {
   for (unsigned int a1 = 0; a1 < scene->num_antennas; ++a1)
     for (unsigned int a2 = a1 + 1; a2 < scene->num_antennas; ++a2) {
-      const struct Antenna* antenna1 = scene->antennas + a1,
-                          * antenna2 = scene->antennas + a2;
+      const struct Antenna* antenna1 = &scene->antennas[a1],
+                          * antenna2 = &scene->antennas[a2];
       if (have_antennas_same_position(antenna1, antenna2))
         report_error_same_position_antennas(antenna1->id, antenna2->id,
                                             validate);
@@ -246,7 +287,7 @@ int num_corners_covered(const struct Scene* scene,
        covered3 = false,
        covered4 = false;
   for (unsigned int a = 0; a < scene->num_antennas; ++a) {
-    const struct Antenna* antenna = scene->antennas + a;
+    const struct Antenna* antenna = &scene->antennas[a];
     int sd1 = squared_distance(antenna->x, antenna->y,
                                construction->x + construction->w,
                                construction->y + construction->h),
@@ -296,7 +337,32 @@ char quality(const struct Scene* scene,
 
 void initialize_empty_scene(struct Scene* scene) {
   scene->num_constructions = 0;
+  scene->capacity_constructions = INITIAL_CAPACITY;
+  scene->constructions = malloc(scene->capacity_constructions * sizeof(struct Construction));
+  if (!scene->constructions) {
+    fprintf(stderr, "error: memory allocation failed\n");
+    exit(1);
+  }
+  
   scene->num_antennas = 0;
+  scene->capacity_antennas = INITIAL_CAPACITY;
+  scene->antennas = malloc(scene->capacity_antennas * sizeof(struct Antenna));
+  if (!scene->antennas) {
+    free(scene->constructions);
+    fprintf(stderr, "error: memory allocation failed\n");
+    exit(1);
+  }
+}
+
+void free_scene(struct Scene* scene) {
+  free(scene->constructions);
+  free(scene->antennas);
+  scene->constructions = NULL;
+  scene->antennas = NULL;
+  scene->num_constructions = 0;
+  scene->num_antennas = 0;
+  scene->capacity_constructions = 0;
+  scene->capacity_antennas = 0;
 }
 
 void load_scene_from_stdin(struct Scene* scene, bool validate) {
@@ -319,16 +385,21 @@ void load_scene_from_stdin(struct Scene* scene, bool validate) {
       if (parsed_line.num_tokens == 0) {
         printf("not ok\n");
         fprintf(stderr, "error: line has no token\n");
+        free_scene(scene);
         exit(1);
       }
       if (!load_construction_from_parsed_line(&parsed_line, scene, validate) &&
-          !load_antenna_from_parsed_line(&parsed_line, scene, validate))
+          !load_antenna_from_parsed_line(&parsed_line, scene, validate)) {
+        free_scene(scene);
         report_error_unrecognized_line(line_number, validate);
+      }
     }
     ++line_number;
   }
-  if (!last_line)
+  if (!last_line) {
+    free_scene(scene);
     report_error_scene_last_line(validate);
+  }
 }
 
 // Validation
@@ -366,7 +437,7 @@ void print_scene_quality(const struct Scene* scene) {
     return;
   }
   for (unsigned int c = 0; c < scene->num_constructions; ++c) {
-    const struct Construction* construction = scene->constructions + c;
+    const struct Construction* construction = &scene->constructions[c];
     printf("%s %s: %c\n", construction_type(construction), construction->id,
            quality(scene, construction));
   }
@@ -400,7 +471,7 @@ void print_scene_summary(const struct Scene* scene) {
 
 void print_scene_constructions(const struct Scene* scene) {
   for (unsigned int c = 0; c < scene->num_constructions; ++c) {
-    const struct Construction* construction = scene->constructions + c;
+    const struct Construction* construction = &scene->constructions[c];
     printf("  %s %s at %d %d with dimensions %d %d\n",
            construction_type(construction),
            construction->id,
@@ -411,7 +482,7 @@ void print_scene_constructions(const struct Scene* scene) {
 
 void print_scene_antennas(const struct Scene* scene) {
   for (unsigned int a = 0; a < scene->num_antennas; ++a) {
-    const struct Antenna* antenna = scene->antennas + a;
+    const struct Antenna* antenna = &scene->antennas[a];
     printf("  antenna %s at %d %d with range %d\n",
            antenna->id, antenna->x, antenna->y, antenna->r);
   }
@@ -452,6 +523,8 @@ void print_scene_bounding_box(const struct Scene* scene) {
 void add_construction(struct Scene* scene,
                       const struct Construction* construction,
                       bool validate) {
+  ensure_construction_capacity(scene);
+  
   unsigned int c = 0;
   while (c < scene->num_constructions &&
          strcmp(construction->id, scene->constructions[c].id) > 0)
@@ -462,7 +535,7 @@ void add_construction(struct Scene* scene,
                                         construction->id, validate);
   for (unsigned int c2 = scene->num_constructions; c2 > c; --c2)
     scene->constructions[c2] = scene->constructions[c2 - 1];
-  struct Construction* scene_construction = scene->constructions + c;
+  struct Construction* scene_construction = &scene->constructions[c];
   strncpy(scene_construction->id, construction->id, MAX_LENGTH_ID);
   scene_construction->type = construction->type;
   scene_construction->x = construction->x;
@@ -475,6 +548,8 @@ void add_construction(struct Scene* scene,
 void add_antenna(struct Scene* scene,
                  const struct Antenna* antenna,
                  bool validate) {
+  ensure_antenna_capacity(scene);
+  
   unsigned int a = 0;
   while (a < scene->num_antennas &&
          strcmp(antenna->id, scene->antennas[a].id) > 0)
@@ -484,7 +559,7 @@ void add_antenna(struct Scene* scene,
     report_error_non_unique_identifiers("antenna", antenna->id, validate);
   for (unsigned int a2 = scene->num_antennas; a2 > a; --a2)
     scene->antennas[a2] = scene->antennas[a2 - 1];
-  struct Antenna* scene_antenna = scene->antennas + a;
+  struct Antenna* scene_antenna = &scene->antennas[a];
   strncpy(scene_antenna->id, antenna->id, MAX_LENGTH_ID);
   scene_antenna->x = antenna->x;
   scene_antenna->y = antenna->y;
