@@ -5,14 +5,6 @@
 #include "antenna.h"
 #include "construction.h"
 
-// Constants
-// ---------
-
-// The maximum number of constructions in a scene
-#define NUM_MAX_CONSTRUCTIONS 100
-// The maximum number of antennas in a scene
-#define NUM_MAX_ANTENNAS 100
-
 // Types
 // -----
 
@@ -20,12 +12,16 @@
 struct Scene {
   // The number of constructions in the scene
   unsigned int num_constructions;
+  // The capacity of constructions in the scene
+  unsigned int capacity_constructions;
   // The constructions of the scene
-  struct Construction constructions[NUM_MAX_CONSTRUCTIONS];
+  struct Construction* constructions;
   // The number of antennas in the scene
   unsigned int num_antennas;
+  // The capacity of antennas in the scene
+  unsigned int capacity_antennas;
   // The antennas of the scene
-  struct Antenna antennas[NUM_MAX_ANTENNAS];
+  struct Antenna* antennas;
 };
 
 // Construction
@@ -37,6 +33,13 @@ struct Scene {
  * @param scene  The scene to initialize
  */
 void initialize_empty_scene(struct Scene* scene);
+
+/**
+ * Frees the memory allocated for a scene
+ *
+ * @param scene  The scene to free
+ */
+void free_scene(struct Scene* scene);
 
 /**
  * Loads a scene from the standard input
