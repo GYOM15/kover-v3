@@ -2,7 +2,7 @@
 
 CFLAGS = -Wall -Wextra
 exec = kover
-modules = scene validation
+modules = scene validation antenna construction
 modules_c_files = $(patsubst %,%.c,$(modules))
 modules_h_files = $(patsubst %,%.h,$(modules))
 modules_o_files = $(patsubst %,%.o,$(modules))
