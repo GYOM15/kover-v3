@@ -2,12 +2,12 @@
 #define SCENE_H_
 
 #include <stdbool.h>
+#include "antenna.h"
+#include "construction.h"
 
 // Constants
 // ---------
 
-// The maximum length of an identifier
-#define MAX_LENGTH_ID 10
 // The maximum number of constructions in a scene
 #define NUM_MAX_CONSTRUCTIONS 100
 // The maximum number of antennas in a scene
@@ -15,42 +15,6 @@
 
 // Types
 // -----
-
-// A type of construction
-enum ConstructionType {
-  // A building
-  BUILDING,
-  // A house
-  HOUSE
-};
-
-// A construction
-struct Construction {
-  // The identifier of the construction
-  char id[MAX_LENGTH_ID + 1];
-  // The type of the construction
-  enum ConstructionType type;
-  // The x coordinate of the construction
-  int x;
-  // The y coordinate of the construction
-  int y;
-  // The half width of the construction (half length in x direction)
-  int w;
-  // The half height of the construction (half length in y direction)
-  int h;
-};
-
-// An antenna
-struct Antenna {
-  // The identifier of the antenna
-  char id[MAX_LENGTH_ID + 1];
-  // The x coordinate of the antenna
-  int x;
-  // The y coordinate of the antenna
-  int y;
-  // The radius of the antenna
-  int r;
-};
 
 // A scene
 struct Scene {
@@ -122,14 +86,6 @@ int scene_num_buildings(const struct Scene* scene);
  * @return       The number of houses
  */
 int scene_num_houses(const struct Scene* scene);
-
-/**
- * Returns the type of construction as a string
- *
- * @param construction  The construction
- * @return              The type
- */
-const char* construction_type(const struct Construction* construction);
 
 /**
  * Prints the quality of the scene to stdout
