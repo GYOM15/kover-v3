@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "antenna.h"
+#include "construction.h"
 #include "validation.h"
 
 // Private constants, types and functions
@@ -35,51 +37,6 @@ struct ParsedLine {
 
 // Validation
 // ----------
-
-/**
- * Indicates if two intervals are overlapping
- *
- * @param a1  The start of the first interval
- * @param b1  The end of the first interval
- * @param a2  The start of the second interval
- * @param b2  The end of the second interval
- */
-bool are_intervals_overlapping(int a1, int b1, int a2, int b2) {
-  return (a1 <= a2 && a2 < b1 && b1 <= b2) ||
-         (a2 <= a1 && a1 < b2 && b2 <= b1);
-}
-
-/**
- * Indicates if two constructions are overlapping
- *
- * Two constructions are overlapping if their intersection has a strictly
- * positive area.
- *
- * @param construction1  The first construction
- * @param construction2  The second construction
- */
-bool are_constructions_overlapping(const struct Construction* construction1,
-                                   const struct Construction* construction2) {
-  return are_intervals_overlapping(construction1->x - construction1->w,
-                                   construction1->x + construction1->w,
-                                   construction2->x - construction2->w,
-                                   construction2->x + construction2->w) &&
-         are_intervals_overlapping(construction1->y - construction1->h,
-                                   construction1->y + construction1->h,
-                                   construction2->y - construction2->h,
-                                   construction2->y + construction2->h);
-}
-
-/**
- * Indicates if two antennas have the same position
- *
- * @param antenna1  The first antenna
- * @param antenna2  The second antenna
- */
-bool have_antennas_same_position(const struct Antenna* antenna1,
-                                 const struct Antenna* antenna2) {
-  return antenna1->x == antenna2->x && antenna1->y == antenna2->y;
-}
 
 /**
  * Checks if the constructions of a scene are valid.
@@ -401,14 +358,6 @@ int scene_num_houses(const struct Scene* scene) {
   for (unsigned int c = 0; c < scene->num_constructions; ++c)
     num_houses += scene->constructions[c].type == HOUSE;
   return num_houses;
-}
-
-const char* construction_type(const struct Construction* construction) {
-  switch (construction->type) {
-    case BUILDING: return "building";
-    case HOUSE:    return "house";
-  }
-  return "??";
 }
 
 void print_scene_quality(const struct Scene* scene) {
