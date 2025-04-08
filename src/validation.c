@@ -150,3 +150,8 @@ void report_error_unrecognized_subcommand(const char* subcommand) {
   fprintf(stderr, "error: subcommand '%s' is not recognized\n", subcommand);
   exit(1);
 }
+
+void report_error_missing_filename(const char* subcommand) {
+  fprintf(stderr, "error: missing filename for subcommand '%s'\n", subcommand);
+  exit(1);
+}
