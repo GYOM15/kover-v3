@@ -13,8 +13,7 @@ const char* construction_type(const struct Construction* construction) {
 }
 
 bool are_intervals_overlapping(int a1, int b1, int a2, int b2) {
-  return (a1 <= a2 && a2 < b1 && b1 <= b2) ||
-         (a2 <= a1 && a1 < b2 && b2 <= b1);
+    return !(b1 <= a2 || b2 <= a1);
 }
 
 bool are_constructions_overlapping(const struct Construction* construction1,
