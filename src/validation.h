@@ -156,4 +156,11 @@ void report_error_mandatory_subcommand();
  */
 void report_error_unrecognized_subcommand(const char* subcommand);
 
+/**
+ * Reports on stderr that a filename is missing for a subcommand
+ *
+ * @param subcommand  The subcommand
+ */
+void report_error_missing_filename(const char* subcommand);
+
 #endif
