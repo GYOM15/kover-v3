@@ -18,3 +18,11 @@ setup() {
 @test "kover summarize handles memory correctly on a given scene" {
   $valgrind kover summarize < "$examples_dir"/3b2a.scene
 }
+
+@test "kover validate handles memory correctly on a given scene" {
+  $valgrind kover validate < "$examples_dir"/3b2a.scene
+}
+
+@test "kover quality handles memory correctly on a given scene" {
+  $valgrind kover quality < "$examples_dir"/3b2a.scene
+}
