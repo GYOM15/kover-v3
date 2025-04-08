@@ -74,6 +74,13 @@ setup() {
   assert_line "error: building b1 and building b2 are overlapping"
 }
 
+@test "kover validate reports an error when two buildings are overlapping (Correction of issue #1)" {
+  run kover validate < "$examples_dir"/2b_overlapping_detected_well.invalid
+  [ "$status" -eq 1 ]
+  assert_line "not ok"
+  assert_line "error: building b1 and building b2 are overlapping"
+}
+
 @test "kover validate reports an error when a building line has a wrong number of arguments" {
   run kover validate < "$examples_dir"/1b_wrong_number_of_arguments.invalid
   [ "$status" -eq 1 ]
