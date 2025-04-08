@@ -7,6 +7,7 @@
 
 #include "scene.h"
 #include "validation.h"
+#include "drawing.h"
 
 // Constants
 // ---------
@@ -107,6 +108,19 @@ void run_summarize_subcommand(void) {
 }
 
 /**
+ * Runs the draw subcommand
+ *
+ * @param filename  The name of the SVG file to create
+ */
+void run_draw_subcommand(const char* filename) {
+  struct Scene scene;
+  load_scene_from_stdin(&scene, false);
+  validate_scene(&scene, false);
+  draw_scene_svg(&scene, filename);
+  free_scene(&scene);
+}
+
+/**
  * Runs the validate subcommand
  */
 void run_validate_subcommand(void) {
@@ -142,6 +156,11 @@ int main(int argc, char* argv[]) {
     run_summarize_subcommand();
   else if (strcmp(subcommand, "validate") == 0)
     run_validate_subcommand();
+  else if (strcmp(subcommand, "draw") == 0) {
+    if (argc < 3)
+      report_error_missing_filename("draw");
+    run_draw_subcommand(argv[2]);
+  }
   else
     report_error_unrecognized_subcommand(subcommand);
   return 0;
