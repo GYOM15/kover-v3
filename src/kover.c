@@ -23,6 +23,7 @@ SUBCOMMAND is mandatory and must take one of the following values:\n\
   quality: reports the cover quality of each construction\n\
   summarize: summarizes the loaded scene\n\
   validate: validates the loaded scene\n\
+  draw: creates an SVG image of the scene (requires filename)\n\
 \n\
 A scene is a text stream that must satisfy the following syntax:\n\
 \n\
