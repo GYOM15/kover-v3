@@ -39,7 +39,7 @@ void initialize_empty_scene(struct Scene* scene);
  *
  * @param scene  The scene to free
  */
-void free_scene(struct Scene* scene);
+void scene_delete(struct Scene* scene);
 
 /**
  * Loads a scene from the standard input

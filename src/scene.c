@@ -354,7 +354,7 @@ void initialize_empty_scene(struct Scene* scene) {
   }
 }
 
-void free_scene(struct Scene* scene) {
+void scene_delete(struct Scene* scene) {
   free(scene->constructions);
   free(scene->antennas);
   scene->constructions = NULL;
@@ -385,19 +385,19 @@ void load_scene_from_stdin(struct Scene* scene, bool validate) {
       if (parsed_line.num_tokens == 0) {
         printf("not ok\n");
         fprintf(stderr, "error: line has no token\n");
-        free_scene(scene);
+        scene_delete(scene);
         exit(1);
       }
       if (!load_construction_from_parsed_line(&parsed_line, scene, validate) &&
           !load_antenna_from_parsed_line(&parsed_line, scene, validate)) {
-        free_scene(scene);
+        scene_delete(scene);
         report_error_unrecognized_line(line_number, validate);
       }
     }
     ++line_number;
   }
   if (!last_line) {
-    free_scene(scene);
+    scene_delete(scene);
     report_error_scene_last_line(validate);
   }
 }

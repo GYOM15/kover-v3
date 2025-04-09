@@ -63,7 +63,7 @@ void run_bounding_box_subcommand(void) {
   load_scene_from_stdin(&scene, false);
   validate_scene(&scene, false);
   print_scene_bounding_box(&scene);
-  free_scene(&scene);
+  scene_delete(&scene);
 }
 
 /**
@@ -76,7 +76,7 @@ void run_describe_subcommand(void) {
   print_scene_summary(&scene);
   print_scene_constructions(&scene);
   print_scene_antennas(&scene);
-  free_scene(&scene);
+  scene_delete(&scene);
 }
 
 /**
@@ -94,7 +94,7 @@ void run_quality_subcommand(void) {
   load_scene_from_stdin(&scene, false);
   validate_scene(&scene, false);
   print_scene_quality(&scene);
-  free_scene(&scene);
+  scene_delete(&scene);
 }
 
 /**
@@ -105,7 +105,7 @@ void run_summarize_subcommand(void) {
   load_scene_from_stdin(&scene, false);
   validate_scene(&scene, false);
   print_scene_summary(&scene);
-  free_scene(&scene);
+  scene_delete(&scene);
 }
 
 /**
@@ -118,7 +118,7 @@ void run_draw_subcommand(const char* filename) {
   load_scene_from_stdin(&scene, false);
   validate_scene(&scene, false);
   draw_scene_svg(&scene, filename);
-  free_scene(&scene);
+  scene_delete(&scene);
 }
 
 /**
@@ -129,7 +129,7 @@ void run_validate_subcommand(void) {
   load_scene_from_stdin(&scene, true);
   validate_scene(&scene, true);
   printf("ok\n");
-  free_scene(&scene);
+  scene_delete(&scene);
 }
 
 // Main function
