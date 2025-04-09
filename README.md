@@ -125,9 +125,14 @@ La construction de l'application dépend des composantes suivantes:
   facilitant la mise en place de tâches automatiques. Cet outil peut aussi être
   installé à l'aide d'un gestionnaire
   de paquets.
+* [Cairo](https://www.cairographics.org/): une bibliothèque graphique utilisée pour
+  la génération d'images SVG. Elle peut être installée via le paquet `libcairo2-dev`
+  sur les systèmes basés sur Debian/Ubuntu.
 * [Bats](https://github.com/bats-core/bats-core): une suite d'application
   facilitant la mise en place de tests unitaires shell. Il n'est pas nécessaire
   d'installer Bats, qui est livré avec ce dépôt dans le répertoire `bats`
+* [Valgrind](https://valgrind.org/) (≥ 3.15.0) : Détection des fuites mémoire
+
 
 ### Construction (*build*)
 
@@ -146,7 +151,7 @@ répertoire `bin`.
 Il est possible en tout temps de nettoyer les fichiers générés, incluant l'exécutable, à l'aide de la commande suivante:
 
 ```sh
-$ make clean
+make clean
 ```
 
 ### Tests
@@ -154,7 +159,7 @@ $ make clean
 On peut aussi lancer la suite de tests Bats à l'aide de `make`:
 
 ```sh
-$ make test
+make test
 ```
 
 Un rapport Bats est alors affiché sur la sortie standard.
@@ -192,7 +197,7 @@ A scene with 1 building and 1 antenna
 Pour afficher l'aide, il suffit d'entrer la commande suivante:
 
 ```sh
-$ kover help
+kover help
 ```
 
 ### `kover quality`
@@ -201,11 +206,11 @@ La sous-commande `quality` rapport sur la sortie standard la qualité de
 couverture des constructions d'une scène donnée. Cette qualité est représentée
 comme suit:
 
-- `A`: chacun des quatre coins de la construction est couvert
-- `B`: exactement trois coins sur quatre de la construction sont couverts
-- `C`: exactement deux coins sur quatre de la construction sont couverts
-- `D`: exactement un coin sur quatre de la construction est couvert
-- `E`: aucun des quatre coins de la construction n'est couvert
+* `A`: chacun des quatre coins de la construction est couvert
+* `B`: exactement trois coins sur quatre de la construction sont couverts
+* `C`: exactement deux coins sur quatre de la construction sont couverts
+* `D`: exactement un coin sur quatre de la construction est couvert
+* `E`: aucun des quatre coins de la construction n'est couvert
 
 Par exemple
 
@@ -236,3 +241,42 @@ $ kover validate < examples/first_line.invalid
 not ok
 error: first line must be exactly 'begin scene'
 ```
+
+### `kover draw`
+
+La sous-commande `draw` génère une représentation graphique de la scène lue sur l'entrée standard au format SVG. Le nom du fichier SVG à créer doit être fourni comme argument. Par exemple :
+
+```sh
+$ kover draw scene.svg < examples/2b1h2a.scene
+
+Cette commande crée un fichier scene.svg dans le répertoire courant, contenant une représentation visuelle de la scène avec :
+
+* Un cadre rectangulaire entourant la scène
+* Une grille pointillée avec des graduations
+* Les constructions (buildings en bleu, houses en violet)
+* Les antennes (en vert)
+* Les identifiants de chaque élément
+
+## Références
+* [The GNU C Reference Manual](https://www.gnu.org/software/gnu-c-manual/)
+* [GCC Command Options](https://gcc.gnu.org/onlinedocs/gcc/Invoking-GCC.html)
+* [Bats Documentation](https://bats-core.readthedocs.io/)
+* [C Programming Language Specification](https://www.iso.org/standard/74528.html)
+* [Cairo Graphics Documentation](https://www.cairographics.org/documentation/)
+* [Cairo SVG Surface Documentation](https://www.cairographics.org/manual/cairo-SVG-Surfaces.html)
+
+## État du projet
+* [X] Le nom du dépôt GitLab est exactement `inf3135-251-tp3`
+* [X] L'URL du dépôt GitLab est exactement `https://gitlab.info.uqam.ca/<utilisateur>/inf3135-251-tp3`
+* [X] Les utilisateurs *`blondin_al`* et *`gosset.guillaume`* ont accès au projet en mode *Maintainer*
+* [X] Le dépôt GitLab est un *fork* du gabarit fourni
+* [X] Le dépôt GitLab est privé
+* [X] Le dépôt contient un fichier `.gitignore` approprié
+* [X] Toutes les sections du fichier `README.md` sont complétées
+* [X] Toutes les fonctions sont documentées avec des docstrings
+* [X] Les tests automatiques passent avec succès
+* [X] Le code est bien formaté et respecte les conventions de style
+* [X] La mémoire est correctement gérée (vérifié avec Valgrind)
+* [X] Le projet compile sans avertissements avec `-Wall -Wextra`
+* [X] La bibliothèque Cairo est correctement liée et utilisée pour la génération d'images SVG
+* [X] La sous-commande `draw` fonctionne comme attendu
