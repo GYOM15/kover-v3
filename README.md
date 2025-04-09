@@ -248,6 +248,7 @@ La sous-commande `draw` génère une représentation graphique de la scène lue 
 
 ```sh
 $ kover draw scene.svg < examples/2b1h2a.scene
+```
 
 Cette commande crée un fichier scene.svg dans le répertoire courant, contenant une représentation visuelle de la scène avec :
 
