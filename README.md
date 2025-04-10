@@ -258,6 +258,10 @@ Cette commande crée un fichier scene.svg dans le répertoire courant, contenant
 * Les antennes (en vert)
 * Les identifiants de chaque élément
 
+### Note sur le test mémoire avec Valgrind pour Cairo
+
+La bibliothèque Cairo utilise Fontconfig et d'autres bibliothèques qui peuvent montrer des fuites de mémoire lors des tests avec Valgrind. Ces fuites sont des faux positifs connus dans ces bibliothèques et ne sont pas liées à notre code. Un fichier de suppression (cairo.supp) est inclus pour ignorer ces fausses alertes lors des tests.
+
 ## Références
 * [The GNU C Reference Manual](https://www.gnu.org/software/gnu-c-manual/)
 * [GCC Command Options](https://gcc.gnu.org/onlinedocs/gcc/Invoking-GCC.html)
