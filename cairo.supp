@@ -1,0 +1,23 @@
+{
+   Cairo_font_leaks
+   Memcheck:Leak
+   ...
+   obj:*/libfontconfig.so*
+   ...
+}
+
+{
+   Cairo_internal_leaks
+   Memcheck:Leak
+   ...
+   obj:*/libcairo.so*
+   ...
+}
+
+{
+   Expat_leaks
+   Memcheck:Leak
+   ...
+   obj:*/libexpat.so*
+   ...
+}
