@@ -30,44 +30,44 @@
 // Antenna stroke width
 #define ANTENNA_STROKE_WIDTH 1.5
 
-// Constantes pour les couleurs
-// RGB pour building (bleu clair)
+// Constantes for les couleurs
+// RGB for building (blue)
 #define BUILDING_FILL_R 0.7
 #define BUILDING_FILL_G 0.7
 #define BUILDING_FILL_B 0.95
-#define BUILDING_FILL_A 0.5 // Semi-transparent
+#define BUILDING_FILL_A 0.5
 
-// RGB pour building stroke (bleu)
+// RGB for building stroke (blue)
 #define BUILDING_STROKE_R 0.0
 #define BUILDING_STROKE_G 0.0
 #define BUILDING_STROKE_B 1.0
 #define BUILDING_STROKE_A 1.0
 
-// RGB pour house (rose clair)
-#define HOUSE_FILL_R 1.0
+// RGB for house (mauve - light purple)
+#define HOUSE_FILL_R 0.8
 #define HOUSE_FILL_G 0.7
-#define HOUSE_FILL_B 0.7
-#define HOUSE_FILL_A 0.5 // Semi-transparent
+#define HOUSE_FILL_B 0.9
+#define HOUSE_FILL_A 0.5
 
-// RGB pour house stroke (rouge)
-#define HOUSE_STROKE_R 1.0
+// RGB for house stroke (dark purple)
+#define HOUSE_STROKE_R 0.5
 #define HOUSE_STROKE_G 0.0
-#define HOUSE_STROKE_B 0.0
+#define HOUSE_STROKE_B 0.7
 #define HOUSE_STROKE_A 1.0
 
-// RGB pour antenna (vert clair)
+// RGB for antenna (Green)
 #define ANTENNA_FILL_R 0.7
 #define ANTENNA_FILL_G 0.95
 #define ANTENNA_FILL_B 0.7
-#define ANTENNA_FILL_A 0.3 // Très transparent
+#define ANTENNA_FILL_A 0.3
 
-// RGB pour antenna stroke (vert)
+// RGB for antenna stroke (Green)
 #define ANTENNA_STROKE_R 0.0
 #define ANTENNA_STROKE_G 0.7
 #define ANTENNA_STROKE_B 0.0
 #define ANTENNA_STROKE_A 1.0
 
-// RGB pour grid lines (gris clair)
+// RGB for grid lines (gray clair)
 #define GRID_LINE_R 0.85
 #define GRID_LINE_G 0.85
 #define GRID_LINE_B 0.85
